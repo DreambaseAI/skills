@@ -1,0 +1,12 @@
+{
+  "skill_name": "dreambase-CHANGE-ME",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Realistic user prompt with concrete details — file names, context, casual phrasing.",
+      "expected_output": "Plain-language description of what a good result looks like.",
+      "files": [],
+      "assertions": []
+    }
+  ]
+}

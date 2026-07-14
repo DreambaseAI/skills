@@ -2,6 +2,28 @@
 
 Agent skills for Dreambase, following [Anthropic's agent skill format](https://code.claude.com/docs/en/skills). Every skill in this repo is prefixed with `dreambase-`.
 
+## Skills
+
+| Skill | What it does |
+|---|---|
+| [`dreambase-echarts`](skills/dreambase-echarts/) | Author Apache ECharts option JSON for the Dreambase renderer — includes an offline option-schema lookup CLI and a structural config validator |
+| [`dreambase-visualization-design`](skills/dreambase-visualization-design/) | Design, critique, and improve charts, dashboards, and infographics using evidence-based visualization, perceptual, accessibility, and integrity principles |
+| [`dreambase-skill-creator`](skills/dreambase-skill-creator/) | Meta-skill for contributors: the standards, template, validator, and eval loop for building skills in this repo |
+
+### dreambase-echarts
+
+```bash
+npx skills add DreambaseAI/skills --skill dreambase-echarts
+```
+
+### dreambase-visualization-design
+
+```bash
+npx skills add DreambaseAI/skills --skill dreambase-visualization-design
+```
+
+The two pair intentionally: `dreambase-visualization-design` decides *what* to build and why; `dreambase-echarts` builds and validates the config.
+
 ## Repository structure
 
 ```
@@ -34,7 +56,21 @@ cp -r skills/dreambase-<name> <your-project>/.claude/skills/
 Or install with the [skills CLI](https://github.com/vercel-labs/skills):
 
 ```bash
+# Interactive — pick from the repo's skills
 npx skills add DreambaseAI/skills
+
+# See what's available without installing
+npx skills add DreambaseAI/skills --list
+
+# Install specific skills by name (see per-skill commands in the catalog above;
+# repeat --skill to install several at once)
+npx skills add DreambaseAI/skills --skill <name> --skill <name>
+
+# Or point at one skill's directory directly
+npx skills add https://github.com/DreambaseAI/skills/tree/main/skills/dreambase-echarts
+
+# Everything, no prompts
+npx skills add DreambaseAI/skills --all
 ```
 
 When working inside this repo, all skills are auto-discovered via the `.claude/skills` symlink, so you can test them in place.

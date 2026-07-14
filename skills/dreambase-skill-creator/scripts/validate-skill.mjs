@@ -134,7 +134,7 @@ function main(argv) {
   if (argv.includes("--all")) {
     const skillsDir = join(repoRoot, "skills");
     targets = readdirSync(skillsDir, { withFileTypes: true })
-      .filter((e) => e.isDirectory())
+      .filter((e) => e.isDirectory() && !e.name.endsWith("-workspace"))
       .map((e) => join(skillsDir, e.name))
       .sort();
   } else {

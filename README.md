@@ -8,6 +8,7 @@ Agent skills for Dreambase, following [Anthropic's agent skill format](https://c
 |---|---|
 | [`dreambase-echarts`](skills/dreambase-echarts/) | Author Apache ECharts option JSON for the Dreambase renderer — includes an offline option-schema lookup CLI and a structural config validator |
 | [`dreambase-visualization-design`](skills/dreambase-visualization-design/) | Design, critique, and improve charts, dashboards, and infographics using evidence-based visualization, perceptual, accessibility, and integrity principles |
+| [`dreambase-data-stories`](skills/dreambase-data-stories/) | Design reports, executive summaries, slide decks, infographics, and scrollytelling pieces that blend charts, illustration, typography, and narrative — built on the practices of FT, NYT Graphics, The Pudding, and Reuters |
 | [`dreambase-skill-creator`](skills/dreambase-skill-creator/) | Meta-skill for contributors: the standards, template, validator, and eval loop for building skills in this repo |
 
 ### dreambase-echarts
@@ -22,7 +23,13 @@ npx skills add DreambaseAI/skills --skill dreambase-echarts
 npx skills add DreambaseAI/skills --skill dreambase-visualization-design
 ```
 
-The two pair intentionally: `dreambase-visualization-design` decides *what* to build and why; `dreambase-echarts` builds and validates the config.
+### dreambase-data-stories
+
+```bash
+npx skills add DreambaseAI/skills --skill dreambase-data-stories
+```
+
+The three form a stack: `dreambase-data-stories` shapes the narrative artifact (report, deck, infographic), `dreambase-visualization-design` decides each chart, and `dreambase-echarts` builds and validates the rendered config.
 
 ## Repository structure
 

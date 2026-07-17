@@ -1,0 +1,50 @@
+{
+  "skill_name": "dreambase-data-stories",
+  "evals": [
+    {
+      "id": 1,
+      "name": "board-exec-summary",
+      "prompt": "need a one-page exec summary for thursday's board meeting from our Q2 numbers: ARR grew from $18.2M to $19.6M, net revenue retention 104% (down from 111% in Q1), we lost 3 enterprise logos (Meridian, TapScale, Corvex — all cited onboarding time), self-serve signups up 40% but only 12% activate within 14 days. sales cycle lengthened from 45 to 61 days. write it up in exec-summary.md — make it something the board can absorb fast",
+      "expected_output": "An answer-first one-pager: headline states the takeaway claim (growth masking a retention/activation problem), 3-4 supporting points each with number + context + so-what, observation vs interpretation separated, a clear ask/next step, design/layout guidance (hierarchy, big-number callouts), 30-second cold-reader structure",
+      "files": [],
+      "assertions": [
+        "Leads with a claim headline stating the overall takeaway (answer-first), not a topic label like 'Q2 Results'",
+        "Every cited number carries context (vs prior period, target, or benchmark) and a so-what — no bare KPIs",
+        "The retention/activation tension (NRR down, logos lost to onboarding, 12% activation) is surfaced as the central finding rather than buried under the growth numbers",
+        "Observation, interpretation, and recommendation are visibly separated (interpretation not stated as fact)",
+        "Includes design/layout guidance (hierarchy, callouts, typography or visual structure) — not just prose content",
+        "One page, structured so a cold reader extracts the decision and ask in ~30 seconds"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "churn-story-slide-deck",
+      "prompt": "our data team finished the churn analysis and I have to present it to the exec team in a 20-min slot. findings: month-2 churn for self-serve is 18% vs 6% for sales-assisted; users who complete 3+ integrations churn at 2%; the in-app setup wizard has a 34% completion rate; support tickets in week 1 correlate with retention not churn (surprising). outline the deck for me — slide by slide with what's on each slide, what the charts are, and speaker notes. save as churn-deck-outline.md",
+      "expected_output": "A slide-by-slide outline where titles read as a coherent argument (assertion-evidence style), one idea per slide, a designated hero chart, chart choices justified per visualization-design principles, the surprising support-ticket finding handled honestly, presenter-vs-slidedoc distinction addressed, and speaker notes separated from slide content",
+      "files": [],
+      "assertions": [
+        "Slide titles are claims (assertion-evidence) and read as a coherent argument when read alone in sequence",
+        "One idea per slide — no slide carries multiple unrelated findings",
+        "A hero chart is designated (the month-2 self-serve vs sales-assisted comparison or the integrations-vs-churn relationship) with a chart form justified by task (comparison/relationship), not decoration",
+        "The surprising support-ticket correlation is presented as observation with interpretation clearly hedged, not asserted as causal",
+        "Addresses the presentation-vs-slidedoc distinction or is explicitly designed for the 20-min spoken context (minimal slide text, speaker notes carry narration)",
+        "Chart specifications follow visualization-design principles (no pies for the comparisons, honest axes, direct labels or annotations called out)"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "public-data-story",
+      "prompt": "we want a public-facing data story for our blog like The Pudding does — from our anonymized usage data: people create their most dreamboards between 11pm and 1am, night owls' boards have 2.3x more items, weekend boards skew heavily toward travel themes while weekday boards skew career, and there's a spike every sunday evening. make it feel crafted, not corporate. plan the piece: narrative, sections, visuals (we render with echarts), scrolling behavior. save the plan to night-owls-story-plan.md",
+      "expected_output": "A visual-essay plan: a hook opening (ideally a single data point), narrative arc through the findings, scroll-driven progressive reveal with nothing essential behind interaction, bespoke/illustrative chart treatments (echarts custom/pictorialBar) that keep encodings honest, a designed type/color system for the crafted feel, and data sourcing/methodology notes",
+      "files": [],
+      "assertions": [
+        "Opens with a hook — a single data point, person, or moment — rather than a methodology preamble",
+        "Uses scroll as the interaction: progressive reveal specified per section, with nothing essential hidden behind clicks or tooltips",
+        "Specifies bespoke or illustrative chart treatments (e.g. echarts custom series, pictorial/ISOTYPE elements, or a clock/radial time metaphor) while keeping encodings proportionally honest",
+        "Annotation-as-narration is explicit: charts carry claim-titles/callouts rather than relying on surrounding paragraphs",
+        "Includes a craft/design system (typography, palette, illustration style) distinct from corporate-default styling",
+        "Includes data provenance/methodology notes (anonymization, date range) per sourcing norms"
+      ]
+    }
+  ]
+}

@@ -53,6 +53,7 @@ Produce a single JSON object conforming to the ECharts `EChartsOption` shape. Th
 | Network | graph |
 | Pipeline stages | funnel |
 | Daily activity | calendar + heatmap |
+| Bespoke/illustrative form (ranges, Gantt, hexbin, error bars, data art) | custom (`renderItem`) + pictorialBar + graphic |
 
 ## Workflow
 
@@ -60,6 +61,7 @@ Produce a single JSON object conforming to the ECharts `EChartsOption` shape. Th
 2. Read the matching reference:
    - Common types (line, bar, pie, scatter, heatmap, candlestick, radar): `references/core-chart-types.md` has a working snippet to start from.
    - Intricate types (sankey, treemap, sunburst, tree, graph, gauge, funnel, boxplot, map, calendar): read `references/charts/<type>.md` — their data schemas are easy to get subtly wrong from memory.
+   - Bespoke or illustration-style visuals (a form no built-in series expresses, or an editorial/data-story piece): read `references/charts/custom.md` for the `renderItem` contract and the custom + pictorialBar + graphic toolkit.
    - Composite requirements (zoom, dual axis, stacking, small multiples, streaming, theming): the matching recipe in `references/patterns/`.
 3. When unsure of an exact option name, type, or default, look it up instead of guessing:
    ```bash

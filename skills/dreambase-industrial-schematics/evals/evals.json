@@ -1,0 +1,65 @@
+{
+  "skill_name": "dreambase-industrial-schematics",
+  "evals": [
+    {
+      "id": 1,
+      "name": "agent-loop-hero-ring",
+      "prompt": "we're launching the Dreambase agent on our marketing site. I want one of those dark schematic diagrams — like Linear's — showing the agent loop: ingest data → profile schema → detect anomalies → draft report → human review, with 'detect anomalies' as the currently-active stage. build it as an SVG I can drop in the hero. save as agent-loop.svg",
+      "expected_output": "A dark orbital-ring SVG: tilted ellipse with dense radial tick marks, five node markers with uppercase monospace tracked labels, exactly one active node with glow and a bright progress arc ending at it, far side dimmed/blurred, film grain overlay, monochrome white-on-near-black palette",
+      "files": [],
+      "assertions": [
+        "Output is a self-contained SVG on a near-black ground with a tilted (elliptical, rotated) ring — not a face-on flowchart or circle diagram",
+        "Ring carries a dense radial tick corona (dozens of ticks pointing at the center), not a plain outline",
+        "All five stages appear as node markers with UPPERCASE monospace labels using visible letter-spacing",
+        "Exactly one focal highlight: the active stage ('detect anomalies') gets the glowing dot and/or bright arc; other nodes are dim",
+        "Depth is rendered: far side of the ring is dimmer and/or blurred relative to the near side",
+        "Palette is monochrome white/gray on black for the ring scene (no rainbow stage colors, no gradients on shapes)"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "exploded-engine-illustration",
+      "prompt": "for the 'under the hood' section of our docs I want an illustration of our query engine drawn like a piece of camera/turbine hardware, exploded view style, dark background with those warm edge highlights. SVG please, save to query-engine.svg",
+      "expected_output": "A cel-shaded flat-vector machinery illustration: stacked cylinder segments exploded along a single axis, 3-4 flat gray values on a warm charcoal ground, thin warm peach rim-light slivers on one consistent lit side, repetition details (knurling/ticks/bolts), optional muted red accent ring, no gradients",
+      "files": [],
+      "assertions": [
+        "Machinery is built from cylinder/ellipse cross-sections sharing one axis and one consistent ellipse aspect, exploded along that axis only",
+        "Shading is flat cel-style: at most ~4 gray fill values plus rim + accent, zero gradients",
+        "Rim highlight is a thin warm (peach/cream) sliver appearing only on one consistent light side",
+        "Detail comes from repeated small elements (knurling, tick rings, slots) rather than outlines or texture fills",
+        "Any red accent is muted and confined to tick/calibration marks, never large fills",
+        "Background is dark charcoal and the shadow side of the object blends toward it"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "hud-progress-component",
+      "prompt": "our dashboard needs a progress scrubber in that technical HUD style — the tick-mark strip like on a camera lens readout, showing sync progress with the current position highlighted. make it a small self-contained HTML/CSS component with a way to set progress",
+      "expected_output": "A tick-strip ruler component: rounded dark track, evenly spaced thin vertical ticks, completed ticks in muted red, one taller/brighter active tick, remaining ticks faint gray; progress settable (CSS custom property or JS/attribute); monospace uppercase micro-label if labeled; reduced-motion respected if animated",
+      "files": [],
+      "assertions": [
+        "Component renders a row of many thin evenly-spaced vertical tick marks on a dark rounded track (not a solid progress bar fill)",
+        "Three tick states are visually distinct: completed (muted red), active (brighter/taller, at most one), and upcoming (faint gray)",
+        "Progress is parameterized (CSS custom property, data attribute, or JS API) rather than hardcoded",
+        "Any text label is small, uppercase, monospace, letter-spaced",
+        "If animated, animation is wrapped in a prefers-reduced-motion guard",
+        "Component is self-contained (no external fonts, libraries, or images)"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "hologram-mesh-donut",
+      "prompt": "make a hero graphic of our platform's capability mix as one of those green hologram wireframe 3D donut charts — like a terminal/Matrix style mesh floating at an angle — segments: MCP Tools 30%, Skills 25%, REST APIs 25%, Headless 20%, with labels pointing at each segment. SVG, save as capability-mesh.svg",
+      "expected_output": "A 3D extruded donut rendered as a phosphor-green wireframe mesh: tilted via x/y/z rotation with perspective, bright structural edges + dim interior grid, translucent or transparent fills, elbow callout leaders with node dots and uppercase mono labels, everything monochromatic in the green hue including background tint",
+      "files": [],
+      "assertions": [
+        "Donut is a 3D extruded mesh viewed from a rotated camera (tilted ellipse + visible walls), not a flat 2D pie",
+        "Two-level line hierarchy: bright structural edges (arcs, verticals) and visibly dimmer interior grid lines (spokes, rings, wall lines)",
+        "Fills are transparent or dark translucent tints of the same green hue — no opaque neutral grays, no gradients",
+        "Segment shares match the given percentages proportionally (30/25/25/20)",
+        "Each labeled segment has an elbow callout leader (anchor dot, diagonal + horizontal rule, uppercase mono label) that does not cross the mesh",
+        "Entire scene is monochromatic in one green hue family — lines, glow, labels, and background tint all share the hue"
+      ]
+    }
+  ]
+}

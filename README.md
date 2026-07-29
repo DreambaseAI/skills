@@ -9,6 +9,7 @@ Agent skills for Dreambase, following [Anthropic's agent skill format](https://c
 | [`dreambase-echarts`](skills/dreambase-echarts/) | Author Apache ECharts option JSON for the Dreambase renderer — includes an offline option-schema lookup CLI and a structural config validator |
 | [`dreambase-visualization-design`](skills/dreambase-visualization-design/) | Design, critique, and improve charts, dashboards, and infographics using evidence-based visualization, perceptual, accessibility, and integrity principles |
 | [`dreambase-data-stories`](skills/dreambase-data-stories/) | Design reports, executive summaries, slide decks, infographics, and scrollytelling pieces that blend charts, illustration, typography, and narrative — built on the practices of FT, NYT Graphics, The Pudding, and Reuters |
+| [`dreambase-public-reports`](skills/dreambase-public-reports/) | Create disclosure-safe public artifacts from real or sensitive data using transformed visuals, constructive and honest storytelling, and explicit approval for visible percentages, rates, deltas, ratios, or indexes |
 | [`dreambase-industrial-schematics`](skills/dreambase-industrial-schematics/) | Create dark cinematic industrial/HUD technical schematics — orbital process rings, cel-shaded exploded machinery, holographic 2D/3D wireframe mesh charts with monochromatic hue themes, tick-strip components — as portable SVG/HTML, with zero-dep ring/ruler and 3D-mesh generators |
 | [`dreambase-skill-creator`](skills/dreambase-skill-creator/) | Meta-skill for contributors: the standards, template, validator, and eval loop for building skills in this repo |
 
@@ -30,13 +31,19 @@ npx skills add DreambaseAI/skills --skill dreambase-visualization-design
 npx skills add DreambaseAI/skills --skill dreambase-data-stories
 ```
 
+### dreambase-public-reports
+
+```bash
+npx skills add DreambaseAI/skills --skill dreambase-public-reports
+```
+
 ### dreambase-industrial-schematics
 
 ```bash
 npx skills add DreambaseAI/skills --skill dreambase-industrial-schematics
 ```
 
-The three form a stack: `dreambase-data-stories` shapes the narrative artifact (report, deck, infographic), `dreambase-visualization-design` decides each chart, and `dreambase-echarts` builds and validates the rendered config.
+The core visualization stack is: `dreambase-data-stories` shapes the narrative artifact (report, deck, infographic), `dreambase-visualization-design` decides each chart, and `dreambase-echarts` builds and validates the rendered config. Add `dreambase-public-reports` when the artifact uses confidential real data but must communicate honest trends without publishing the underlying values.
 
 ## Repository structure
 

@@ -9,8 +9,10 @@ Agent skills for Dreambase, following [Anthropic's agent skill format](https://c
 | [`dreambase-echarts`](skills/dreambase-echarts/) | Author Apache ECharts option JSON for the Dreambase renderer — includes an offline option-schema lookup CLI and a structural config validator |
 | [`dreambase-visualization-design`](skills/dreambase-visualization-design/) | Design, critique, and improve charts, dashboards, and infographics using evidence-based visualization, perceptual, accessibility, and integrity principles |
 | [`dreambase-data-stories`](skills/dreambase-data-stories/) | Design reports, executive summaries, slide decks, infographics, and scrollytelling pieces that blend charts, illustration, typography, and narrative — built on the practices of FT, NYT Graphics, The Pudding, and Reuters |
+| [`dreambase-data-presentation`](skills/dreambase-data-presentation/) | Design and build data presentations — board, investor, QBR, readout, launch, sales, and keynote decks — as interactive self-contained web decks, native .pptx, Google Slides, or a build spec, with verified slide-craft specs, staged chart reveals, and presenter mechanics |
 | [`dreambase-public-reports`](skills/dreambase-public-reports/) | Create disclosure-safe public artifacts from real or sensitive data using transformed visuals, constructive and honest storytelling, and explicit approval for visible percentages, rates, deltas, ratios, or indexes |
 | [`dreambase-industrial-schematics`](skills/dreambase-industrial-schematics/) | Create dark cinematic industrial/HUD technical schematics — orbital process rings, cel-shaded exploded machinery, holographic 2D/3D wireframe mesh charts with monochromatic hue themes, tick-strip components — as portable SVG/HTML, with zero-dep ring/ruler and 3D-mesh generators |
+| [`dreambase-micrographic-design`](skills/dreambase-micrographic-design/) | Design in the micrographics style — compliance-labelling visual language (rating plates, care tags, spec sheets) used as intentional design: hairline rules, boxed compartments, tick scales, `LABEL: value` pairs, mark clusters, micro-typography, monochrome plus one safety accent — with the certification-mark legal guardrail |
 | [`dreambase-skill-creator`](skills/dreambase-skill-creator/) | Meta-skill for contributors: the standards, template, validator, and eval loop for building skills in this repo |
 
 ### dreambase-echarts
@@ -31,6 +33,12 @@ npx skills add DreambaseAI/skills --skill dreambase-visualization-design
 npx skills add DreambaseAI/skills --skill dreambase-data-stories
 ```
 
+### dreambase-data-presentation
+
+```bash
+npx skills add DreambaseAI/skills --skill dreambase-data-presentation
+```
+
 ### dreambase-public-reports
 
 ```bash
@@ -43,7 +51,13 @@ npx skills add DreambaseAI/skills --skill dreambase-public-reports
 npx skills add DreambaseAI/skills --skill dreambase-industrial-schematics
 ```
 
-The core visualization stack is: `dreambase-data-stories` shapes the narrative artifact (report, deck, infographic), `dreambase-visualization-design` decides each chart, and `dreambase-echarts` builds and validates the rendered config. Add `dreambase-public-reports` when the artifact uses confidential real data but must communicate honest trends without publishing the underlying values.
+### dreambase-micrographic-design
+
+```bash
+npx skills add DreambaseAI/skills --skill dreambase-micrographic-design
+```
+
+The core visualization stack is: `dreambase-data-stories` shapes the narrative artifact (report, one-pager, infographic, scrollytelling piece), `dreambase-visualization-design` decides each chart, and `dreambase-echarts` builds and validates the rendered config. When the artifact is a deck, `dreambase-data-presentation` takes the storyline and owns the slide, the room, and the presenter — including the build path. Add `dreambase-public-reports` when the artifact uses confidential real data but must communicate honest trends without publishing the underlying values.
 
 ## Repository structure
 

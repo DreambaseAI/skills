@@ -1,0 +1,69 @@
+{
+  "skill_name": "dreambase-data-presentation",
+  "evals": [
+    {
+      "id": 1,
+      "name": "interactive-html-deck-with-live-charts",
+      "prompt": "build me an interactive deck I can actually present next Tuesday from our support data — ticket volume went 1,240 → 1,890 over six months, first-response time dropped 4.2h → 1.6h after we added the triage bot in March, CSAT flat at 4.3, but escalations to eng tripled (31 → 94). I want the charts live, not screenshots, and it has to work on the conference wifi which is terrible. save it as support-review.html plus whatever build files you need.",
+      "expected_output": "A self-contained HTML deck (or a complete, correct build recipe for one) with vendored reveal.js + ECharts inlined, zero network requests, 1920x1080 canvas, assertion titles, speaker notes, and the escalation finding surfaced as the real story rather than buried under the response-time win",
+      "files": [],
+      "assertions": [
+        "Produces a single self-contained HTML file with no external network requests — assets inlined or vendored, not loaded from a CDN (directly responsive to the 'terrible wifi' constraint)",
+        "Sets an explicit 16:9 canvas (e.g. width 1920, height 1080) rather than accepting reveal.js's non-16:9 960x700 default",
+        "Every content slide title is a full-sentence assertion with a number or verb of change, not a topic label like 'Ticket Volume'",
+        "The tripled eng escalations are surfaced as the central tension against the first-response-time improvement, not reported as one metric among four",
+        "Charts are mounted so they render in print/scroll views (not only on slidechanged), or the blank-chart-on-export risk is explicitly addressed",
+        "Includes speaker notes carrying the numbers and caveats, distinct from on-slide content",
+        "Does not put load-bearing information in tooltips or hover-only states"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "board-deck-genre-and-reading-condition",
+      "prompt": "put together our Q3 board deck. ARR $24.1M (plan was $25.5M), net burn $1.8M/mo, 14 months runway, headcount 118 (plan 130), pipeline coverage 2.1x going into Q4 (we want 3x), churn ticked up to 1.4% monthly from 1.1%. two things I need the board to decide: whether to slow hiring or extend the raise timeline, and whether to kill the SMB motion. board meeting is in 10 days.",
+      "expected_output": "A board-deck outline following the genre conventions: priorities scorecard, highlights AND lowlights, metrics vs plan, the required monthly waterfalls, and — most importantly — the two decisions framed as options with a recommendation, occupying the majority of the agenda. Should also address the pre-read timing given 10 days' notice.",
+      "files": [],
+      "assertions": [
+        "Recognizes this as a board deck and applies board-deck genre structure rather than a generic metrics deck",
+        "The two named decisions are framed as working-session items with options and a management recommendation, given the dominant share of time/space — not appended after a performance review",
+        "Includes both highlights and lowlights explicitly; the misses (ARR vs plan, pipeline coverage, churn) are surfaced rather than softened",
+        "Includes monthly waterfall charts for revenue, burn, cash balance, and headcount, or explicitly names them as the required recurring exhibits",
+        "Addresses the pre-read / distribution timing (materials sent ahead of the meeting, not presented cold)",
+        "Every metric is shown against plan or prior period rather than as a bare number",
+        "Appendix discipline is applied — supporting detail separated from the decision-bearing body"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "brand-ingestion-and-pptx-template",
+      "prompt": "here's our brand guide (design.md) and our corporate template (Acme-Master.potx). take the attached quarterly numbers and make it a PowerPoint our CFO can drop straight into the exec review — has to look like it came from our team, not a generic deck. our primary brand color is #C8102E and the guide says body copy is Söhne.",
+      "expected_output": "Recognizes that an actual .potx exists and should be authored into rather than reconstructed; extracts brand tokens from both inputs; addresses the accessibility problem with a saturated red primary (contrast, and red-as-semantic collision) by extending rather than altering the brand palette; and produces a real .pptx with proper placeholders, notes, and alt text",
+      "files": [],
+      "assertions": [
+        "Chooses the author-into-the-real-template path (e.g. pptx-automizer) rather than generating a lookalike from scratch, because an actual .potx was supplied",
+        "Reads brand values from the .potx theme (clrScheme accents, major/minor fonts) rather than relying only on the prose guide",
+        "Does not alter the brand red for accessibility; instead derives an accessible brand-adjacent text color and/or a declared chart-only extended palette, and says so",
+        "Flags the semantic collision of a red brand primary against red-means-negative in a financial deck, and proposes a non-color channel or alternate hue",
+        "Addresses the Söhne font licensing/embedding question rather than silently substituting a fallback",
+        "Emits real title placeholders, speaker notes, and alt text on visuals for accessibility",
+        "Reads the actual slide dimensions from the template rather than assuming a default slide size"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "reading-condition-fork",
+      "prompt": "our VP asked me to 'just send her the slides' on the pricing experiment results by end of day. we tested three price points across 4,200 accounts over 8 weeks: $49 converted at 3.1%, $79 at 2.4%, $99 at 1.2%, but revenue per visitor peaked at $79 ($1.90 vs $1.52 and $1.19). churn at 90 days was 8% / 6% / 5% respectively. make me the slides.",
+      "expected_output": "Recognizes this is a sent/read artifact, not a presented one, and designs a short slidedoc accordingly — including the density and length conventions for an executive who asked for slides to read alone. Should also handle the genuine analytical tension (highest conversion vs highest revenue per visitor vs lowest churn).",
+      "files": [],
+      "assertions": [
+        "Explicitly identifies the reading condition as sent/read-alone rather than presented, and designs for it",
+        "Applies read-artifact length discipline (a small number of pages, in the range of an executive 'send me your slides' request) rather than a 20-slide presentation deck",
+        "Density matches a read artifact — self-explanatory pages that do not require a narrator, without becoming a wall of prose",
+        "Surfaces the $79 revenue-per-visitor optimum as the recommendation while honestly showing the conversion-rate tradeoff, rather than presenting conversion rate alone",
+        "Incorporates the churn gradient into the recommendation (lifetime value implication) rather than reporting it as an unrelated metric",
+        "Titles are assertions carrying the finding, so each page stands alone when read without narration",
+        "States limitations or confidence (test duration, sample, what was not tested) rather than presenting the result as settled"
+      ]
+    }
+  ]
+}

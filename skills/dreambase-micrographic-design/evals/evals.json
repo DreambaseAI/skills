@@ -1,0 +1,85 @@
+{
+  "skill_name": "dreambase-micrographic-design",
+  "evals": [
+    {
+      "id": 1,
+      "name": "apparel-legal-gate",
+      "prompt": "make me a graphic for the back of a t-shirt for our dev tool launch — I want it to look like the care label / spec tag inside a garment, with the washing symbols and a CE mark and a barcode. black on white, we're printing 200 of these next week. save it as tee-back.svg",
+      "expected_output": "Raises the certification-mark and care-symbol legal problem before building (a t-shirt is a shippable product), proposes invented marks with fictional identifiers and an original symbol family rather than reproducing CE and GINETEX symbols, generates a real scannable barcode or omits it, and scales the type system up for screen printing rather than using the 4-9pt band",
+      "files": [],
+      "assertions": [
+        "Raises the legal issue proactively — a t-shirt is a product placed on the market, so a CE mark or CE-lookalike is not safe decorative use",
+        "Does not reproduce the real CE mark on the garment artwork, and does not propose a slightly-distorted near-CE as the solution (the lookalike prohibition covers 'meaning or form')",
+        "Flags that the ISO/GINETEX care symbols are registered trademarks and builds an original symbol family using the modular construction logic instead of copying the standard set",
+        "Any invented conformity mark is given a fictional identifier (file/body/licence number), because a bare glyph reads as fake",
+        "Addresses screen-printing production limits — scales type and stroke up rather than using the 4-9pt compliance band, which will not survive garment printing",
+        "Either generates a genuinely valid/scannable barcode or omits it, rather than drawing decorative stripes",
+        "Does not require the user to have asked about legality before raising it"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "web-component-legibility",
+      "prompt": "restyle our pricing page's plan comparison table in the micrographics / spec sheet look — hairline rules, tick marks, technical micro type, that whole aesthetic. it's a React component, here's roughly what it has: 3 plans, 12 feature rows, monthly/annual toggle, and a CTA button per plan. make it feel engineered.",
+      "expected_output": "Applies the visual grammar (hairline rules, compartments, LABEL: value pairs, tabular figures, monochrome plus one accent, no shadows or radius) while keeping prices, feature labels, the toggle, and CTAs at readable sizes and accessible contrast — explicitly reserving the micro band for chrome only",
+      "files": [],
+      "assertions": [
+        "Keeps load-bearing content (prices, plan names, feature labels, CTA buttons) at readable sizes; the 5-12px micro band is used only for chrome like source lines, revision codes, or corner marks",
+        "Does not put interactive controls (toggle, CTA) in micro type",
+        "Maintains WCAG contrast (4.5:1 body, 3:1 large) and does not treat the technical aesthetic as an accessibility exemption",
+        "Applies the grammar concretely: hairline rules and boxed compartments instead of card shadows, no border radius, no gradients",
+        "Specifies tabular/lining figures with slashed zero for the pricing numbers",
+        "Marks decorative elements (tick strips, crosshairs, corner brackets) as aria-hidden or otherwise non-semantic",
+        "Applies the two-type-size discipline in the data area rather than inventing an intermediate size ladder"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "rating-plate-authenticity",
+      "prompt": "design a fictional rating plate graphic for a made-up hardware product for our landing page hero — an edge compute box called the NODE-7. I want it to look genuinely real, like something photographed off the back of actual hardware. SVG please.",
+      "expected_output": "Produces a rating plate that reproduces the authentic incoherence — mark band with mixed typography, unequal gaps, optical rather than baseline alignment, satellite identifier text off the grid, a separate overlapping variable-data layer — with real internally-consistent specs, invented marks with fictional identifiers, and correct IP-code and symbol conventions",
+      "files": [],
+      "assertions": [
+        "Reproduces the incoherence deliberately: marks are not baseline-aligned, gaps between marks are irregular, and marks carry differing typography rather than a unified type system",
+        "Includes satellite identifier text (file/licence numbers) at sizes unrelated to the main text grid",
+        "Uses invented conformity marks with fictional identifiers rather than real CE/UL/FCC marks, or restricts itself to free informational symbols",
+        "Specs are internally consistent and plausible (voltage/current/wattage actually relate; IP code well-formed with no spaces or hyphens and both positions filled)",
+        "Applies rating-plate structure: identity block, rule, LABEL: value spec block, mark band collected in one region rather than interleaved with data",
+        "Includes authenticity details such as a separate overlapping serial/barcode layer, an artwork part number in the margin, or a revision code",
+        "Uses two type sizes in the data area rather than a smooth size ladder"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "applied-mode-not-simulation",
+      "prompt": "make me a poster for our AI infrastructure conference in that micrographics look — big and loud, it's going on a wall and also as an Instagram post. conference is called SUBSTRATE, it's in Brooklyn in October. I want it to feel like a piece of industrial propaganda, not like a boring spec sheet.",
+      "expected_output": "Applied-mode work: a saturated or dark ground, huge display type carrying SUBSTRATE, mono micro-layer as counterpoint, extreme scale contrast, deliberate art-directed composition, invented institutional telemetry, and one or two texture moves — not a monochrome compliance-plate simulation",
+      "files": [],
+      "assertions": [
+        "Works in applied mode rather than producing a monochrome rating-plate simulation — the user explicitly asked for loud, not spec-sheet",
+        "Uses a saturated or dark ground rather than defaulting to black-on-white monochrome",
+        "Establishes extreme scale contrast — the conference name at display size against mono micro-type, with no intermediate sizes",
+        "Composes deliberately (centred/balanced/art-directed) rather than applying the deliberate-misalignment rules, which belong to simulation mode",
+        "Invents an institutional frame (division, programme, sector, issue number) so the telemetry is internally consistent rather than random",
+        "Includes at least one texture move (line-screen fill, halftone, grain, grid, or hazard striping) rather than flat rules alone",
+        "Handles both output sizes — wall poster and a square/vertical social crop — rather than one artboard",
+        "Real information (name, city, month) is accurate; invented telemetry is clearly world-building rather than false claims"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "brand-fit-pushback",
+      "prompt": "we're a meditation and sleep app, very soft and calming brand — pastel gradients, rounded everything, friendly illustration. can you redo our onboarding screens in that technical spec-sheet micrographics style? I saw it on a Nike thing and loved it.",
+      "expected_output": "Names the brand-fit problem directly — the style signals rigor, engineering and measurement, which is at odds with a warmth/calm brand — while still delivering something useful: either a scoped application where it genuinely fits, or the requested work with the tension stated",
+      "files": [],
+      "assertions": [
+        "Explicitly raises the brand-fit failure mode rather than silently executing the request",
+        "Explains the specific mismatch: the idiom signals rigor/engineering/measurement, which conflicts with a warmth-and-calm value proposition",
+        "Still delivers something concrete rather than only refusing — e.g. a scoped surface where the idiom genuinely fits, a hybrid, or the requested design with the tension flagged",
+        "Does not moralize or lecture; states the concern briefly and moves to useful work",
+        "If proceeding, notes the specific conflicts with the existing brand (gradients and rounded corners are incompatible with the idiom's flat single-colour logic)",
+        "Treats the user's decision as final if they reaffirm the request"
+      ]
+    }
+  ]
+}

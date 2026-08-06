@@ -3,8 +3,8 @@
  * Validate Dreambase skills against repo conventions. Zero dependencies.
  *
  * Usage:
- *   node skills/dreambase-skill-creator/scripts/validate-skill.mjs skills/dreambase-<name> [more...]
- *   node skills/dreambase-skill-creator/scripts/validate-skill.mjs --all
+ *   node internal/skill-creator/scripts/validate-skill.mjs skills/dreambase-<name> [more...]
+ *   node internal/skill-creator/scripts/validate-skill.mjs --all
  *
  * Checks (errors fail the run, warnings don't):
  *   E: SKILL.md exists
@@ -26,6 +26,10 @@ const MAX_DESCRIPTION = 1024;
 const MAX_BODY_LINES = 500;
 const MAX_REF_LINES_NO_TOC = 300;
 const NAME_RE = /^dreambase-[a-z0-9]+(-[a-z0-9]+)*$/;
+// The contributor meta-skill lives at `internal/skill-creator/` so it is never
+// bundled into the shipped plugin. Its directory name therefore cannot match its
+// `dreambase-skill-creator` frontmatter name, and it ships no evals.
+const META_SKILL_DIR = "skill-creator";
 // Bundled-resource paths the body tells the model to read/run.
 // evals/ is excluded: skills mention it as a convention, not a loadable resource.
 const LOCAL_PATH_RE = /(?<![\w/])((?:scripts|references|assets)\/[\w./-]+)/g;
@@ -80,7 +84,9 @@ function validate(skillDir) {
     errors.push("frontmatter missing required field: name");
   } else {
     if (!NAME_RE.test(name)) errors.push(`name '${name}' must be kebab-case with the dreambase- prefix`);
-    if (name !== basename(skillDir)) errors.push(`name '${name}' does not match directory name '${basename(skillDir)}'`);
+    if (name !== basename(skillDir) && basename(skillDir) !== META_SKILL_DIR) {
+      errors.push(`name '${name}' does not match directory name '${basename(skillDir)}'`);
+    }
     if (name.length > 64) errors.push(`name is ${name.length} chars (max 64)`);
   }
 
@@ -121,7 +127,7 @@ function validate(skillDir) {
     } catch (e) {
       errors.push(`evals/evals.json is not valid JSON: ${e.message}`);
     }
-  } else if (basename(skillDir) !== "dreambase-skill-creator") {
+  } else if (basename(skillDir) !== META_SKILL_DIR) {
     warnings.push("no evals/evals.json — add test prompts before shipping");
   }
 

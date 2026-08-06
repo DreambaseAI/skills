@@ -9,14 +9,15 @@ This repo holds agent skills for Dreambase. This meta-skill encodes the standard
 
 ## Repo conventions (non-negotiable)
 
-- Every skill lives at `skills/dreambase-<kebab-case-name>/`.
+- Every shipped skill lives at `skills/dreambase-<kebab-case-name>/`. Everything under `skills/` is bundled into the `dreambase` plugin (`plugins/dreambase/skills/` symlinks into it), so a contributor-only skill like this one lives at `internal/` instead.
 - The directory name and the frontmatter `name` field are identical, and both carry the `dreambase-` prefix.
+- Add a matching symlink under `.claude/skills/` (`ln -s ../../skills/dreambase-<name> .claude/skills/dreambase-<name>`) and one under `plugins/dreambase/skills/` (`ln -s ../../../skills/dreambase-<name> …`) so the skill is discoverable in-repo and ships with the plugin.
 - `SKILL.md` is required. `scripts/`, `references/`, `assets/`, and `evals/` are optional.
 - Eval prompts (`evals/evals.json`) are committed with the skill. Run outputs (`*-workspace/` directories) are gitignored — never commit them.
 - Bundled scripts are Node-first: zero-dependency `.mjs` using only Node built-ins (`node:fs`, `node:path`, `fetch`), or POSIX shell for glue. Dreambase is a Node/Next.js shop, so Node is the runtime we can rely on everywhere these skills run — avoid Python and avoid anything needing an `npm install` at skill runtime.
 - Before finishing any skill work, run the validator:
   ```bash
-  node skills/dreambase-skill-creator/scripts/validate-skill.mjs skills/dreambase-<name>
+  node internal/skill-creator/scripts/validate-skill.mjs skills/dreambase-<name>
   ```
 
 ## Anatomy of a skill

@@ -32,5 +32,5 @@ Authoring checklist (delete before shipping):
 - [ ] repeated helper code moved to scripts/
 - [ ] evals/evals.json has 2-3 realistic prompts
 - [ ] scripts (if any) are zero-dependency .mjs or POSIX shell
-- [ ] passes: node skills/dreambase-skill-creator/scripts/validate-skill.mjs <this-dir>
+- [ ] passes: node internal/skill-creator/scripts/validate-skill.mjs <this-dir>
 -->

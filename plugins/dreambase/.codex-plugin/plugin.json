@@ -1,0 +1,15 @@
+{
+  "name": "dreambase",
+  "version": "1.0.0",
+  "description": "Connect to the Dreambase MCP server and analyze your product data — workspaces, dashboards, datasets, metric snapshots, database health reports, and workspace Skills — with skills for querying it correctly and turning the results into charts, reports, and decks.",
+  "skills": [
+    "skills/dreambase-mcp",
+    "skills/dreambase-echarts",
+    "skills/dreambase-visualization-design",
+    "skills/dreambase-data-stories",
+    "skills/dreambase-data-presentation",
+    "skills/dreambase-public-reports",
+    "skills/dreambase-industrial-schematics",
+    "skills/dreambase-micrographic-design"
+  ]
+}

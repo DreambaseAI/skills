@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "dreambase": {
+      "type": "http",
+      "url": "https://app.dreambase.com/mcp"
+    }
+  }
+}

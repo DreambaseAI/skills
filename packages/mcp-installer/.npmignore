@@ -1,0 +1,13 @@
+# The `files` allowlist in package.json governs what ships; this is a backstop.
+src/
+test/
+node_modules/
+coverage/
+tsconfig.json
+tsup.config.ts
+vitest.config.ts
+eslint.config.js
+.prettierrc.json
+.env
+.env.*
+*.tsbuildinfo

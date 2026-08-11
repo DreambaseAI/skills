@@ -120,7 +120,7 @@ plugins/dreambase/                # The one shipped plugin
 ├── .mcp.json                     # Remote http MCP server (Claude)
 ├── mcp.json                      # Same, under Cursor's filename
 ├── SETUP.md                      # Guided first-run setup
-├── assets/logo.svg
+├── assets/logo.png               # 512x512 brand mark
 └── skills/                       # Relative symlinks into ../../../skills/
 skills/dreambase-<name>/          # Canonical skill tree — one dir per skill
 ├── SKILL.md                      # Required: frontmatter + instructions

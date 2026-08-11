@@ -40,10 +40,11 @@ be triggered.
 > Dreambase tool. A browser window will open asking you to authorize Dreambase
 > for this client. Review the requested permissions and click **Allow**.
 
-The consent screen lists the scopes being granted (reading workspaces,
-dashboards, datasets, connections, health reports, skills; running health checks
-and creating skills). Granting all of them is the normal setup — the tool list is
-scope-gated, so a declined scope silently removes the matching tools.
+The consent screen lists the scopes being granted. Start with the read scopes
+needed to inspect workspaces, dashboards, datasets, connections, health reports,
+and skills. Request write scopes only when the user asks to create or change
+something. The tool list is scope-gated, so an omitted scope removes the matching
+tools; re-authorize later if the user needs an additional capability.
 
 **Check:** the browser shows a success page and the client reports the server as
 connected.

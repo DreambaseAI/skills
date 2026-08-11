@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdtempSync, readdirSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -13,12 +13,14 @@ import {
 const packageDir = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const repoSkillsDir = resolve(packageDir, "../../skills");
 
-/** The canonical skill names, straight from the repo root. */
+/** The public plugin inventory, sourced from its shared manifest. */
 function canonicalSkillNames(): string[] {
-  return readdirSync(repoSkillsDir, { withFileTypes: true })
-    .filter((e) => e.isDirectory() && !e.name.endsWith("-workspace"))
-    .map((e) => e.name)
-    .sort();
+  return JSON.parse(
+    readFileSync(
+      resolve(repoSkillsDir, "../plugins/dreambase/plugin-skills.json"),
+      "utf8",
+    ),
+  ).sort();
 }
 
 describe("skills", () => {
@@ -32,7 +34,7 @@ describe("skills", () => {
     );
   });
 
-  it("bundles every skill from the repo root", () => {
+  it("bundles every skill in the public plugin inventory", () => {
     expect(bundledSkillNames().sort()).toEqual(canonicalSkillNames());
   });
 

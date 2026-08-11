@@ -1,0 +1,46 @@
+{
+  "skill_name": "dreambase-visualization-design",
+  "evals": [
+    {
+      "id": 1,
+      "name": "pie-chart-pushback-recommendation",
+      "prompt": "our marketing lead wants a pie chart on the growth dashboard showing where signups come from — we have 12 traffic sources (organic, paid search, 6 social channels, referral, email, partnerships, other). she said make it colorful and make it pop. can you spec this out for the design team? write the spec to signup-sources-spec.md",
+      "expected_output": "A chart recommendation that pushes back on a 12-slice pie with reasoning (angle/area decoding, palette limits), recommends a sorted bar (or similar position-based form) with grouping of small categories, follows the standard recommendation structure, and includes accessibility (alt text, non-color distinctions) and an honest treatment of the 'make it pop' request",
+      "files": [],
+      "assertions": [
+        "Recommends a position/length-based form (sorted bar, dot plot) as primary instead of a 12-slice pie, with a perceptual reason given",
+        "Addresses category count: groups or truncates the 12 sources (e.g. top-N plus Other) or otherwise handles cardinality and the ~6-hue palette limit",
+        "Output follows a structured recommendation format including intent/audience, recommended visual with why, and an alternative section",
+        "Includes an accessibility section with alt text and non-color distinction",
+        "Handles 'make it pop' constructively (single emphasis color / hierarchy) rather than either ignoring the stakeholder or complying with decoration-first design"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "ops-dashboard-critique",
+      "prompt": "can you review our ops dashboard before we ship it? here's the current design: 14 equally-sized KPI tiles across the top (all big blue numbers, no comparisons), below that 5 gauges for system health (red/yellow/green only, thresholds picked by the designer to look balanced), a bar chart of weekly incidents with the y-axis starting at 35 to show the recent improvement more clearly, and a latency trend where exact values only show on hover. filters are in a collapsed drawer and don't show what's active. target users are the on-call SREs. write the review to ops-dashboard-review.md",
+      "expected_output": "A prioritized critique (P0/P1/P2) that catches the truncated bar axis as misleading, the invented gauge thresholds, color-only status (accessibility), hover-only values, hidden active filters, and the undifferentiated KPI wall; includes a verdict, things to preserve, and a proposed redesign for a monitoring-mode dashboard",
+      "files": [],
+      "assertions": [
+        "Uses a prioritized structure (P0/severity-critical first, not an unranked list) with an overall verdict",
+        "Flags the bar chart y-axis starting at 35 as misleading (P0-level), explaining bars encode by length",
+        "Flags arbitrary red/yellow/green gauge thresholds and color-only status as problems, including the accessibility dimension",
+        "Flags hover-only exact values and hidden active filters as violations for a monitoring dashboard",
+        "Critiques the 14 equal KPI tiles as lacking hierarchy/comparisons and proposes a monitoring-appropriate structure (overview, exceptions, drill path)"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "misleading-axis-request",
+      "prompt": "quick one — for the board deck, our revenue bar chart looks too flat. growth was 8% but it barely shows. just change the y-axis to start at 40M instead of 0 so the bars show the growth better. it's bars going 42, 44, 45.3, 46.8 by quarter. write the updated chart guidance to board-revenue-chart.md",
+      "expected_output": "Declines to truncate the bar axis, explains why (length encoding makes 8% look like 3-4x), and proposes honest alternatives that legitimately emphasize the growth: line/dot chart with appropriate domain, growth-rate chart, indexed values, or annotation of the 8% figure",
+      "files": [],
+      "assertions": [
+        "Does not comply with truncating the bar chart axis to 40M",
+        "Explains the specific distortion: bar length ratios would exaggerate the 8% growth several-fold (lie factor reasoning)",
+        "Proposes at least two honest alternatives that still emphasize growth (e.g. line or dot plot with non-zero domain disclosed, explicit growth-rate chart, direct annotation of +8%)",
+        "Tone is constructive toward the stakeholder's legitimate goal (showing real growth) rather than a bare refusal"
+      ]
+    }
+  ]
+}

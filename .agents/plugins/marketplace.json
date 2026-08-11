@@ -1,0 +1,20 @@
+{
+  "name": "dreambase",
+  "interface": {
+    "displayName": "Dreambase"
+  },
+  "plugins": [
+    {
+      "name": "dreambase",
+      "source": {
+        "source": "local",
+        "path": "./plugins/dreambase"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

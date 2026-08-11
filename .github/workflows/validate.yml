@@ -1,0 +1,52 @@
+name: Validate release payload
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: packages/mcp-installer/pnpm-lock.yaml
+
+      - name: Validate generated plugin payload and shared metadata
+        run: pnpm check:plugin
+
+      - name: Validate skills
+        run: node internal/skill-creator/scripts/validate-skill.mjs --all
+
+      - name: Validate Claude manifests
+        run: |
+          npx --yes @anthropic-ai/claude-code@2.1.227 plugin validate ./plugins/dreambase --strict
+          npx --yes @anthropic-ai/claude-code@2.1.227 plugin validate ./.claude-plugin/marketplace.json --strict
+
+      - name: Validate Cursor marketplace
+        run: |
+          curl --fail --silent --show-error \
+            https://raw.githubusercontent.com/cursor/plugin-template/46216072ac5750f782f95bb325b4d12b7c3ae9c9/scripts/validate-template.mjs \
+            --output /tmp/validate-cursor-plugin.mjs
+          node /tmp/validate-cursor-plugin.mjs
+
+      - name: Validate installer and package
+        working-directory: packages/mcp-installer
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm typecheck
+          pnpm lint
+          pnpm format:check
+          pnpm test
+          pnpm audit --prod
+          npm pack --dry-run

@@ -4,15 +4,17 @@
 
 If your host supports remote MCP servers natively — **Claude Code**, **Cursor**,
 **Codex** — install the `dreambase` plugin instead of this CLI. It declares the
-http server, the host runs the OAuth flow itself, and every Dreambase skill comes
-with it:
+http server, the host runs the OAuth flow itself, and the focused Dreambase data
+skills come with it:
+
+**Claude Code:**
 
 ```
 /plugin marketplace add DreambaseAI/skills
 /plugin install dreambase@dreambase
 ```
 
-See the [repo README](../../README.md) for the full instructions.
+See the [repo README](../../README.md) for Cursor and Codex instructions.
 
 ## When to use this installer
 
@@ -67,26 +69,33 @@ npx @dreambase/mcp logout [--remove-config]
 
 ### Flags
 
-| Flag                 | Description                                                                                                                |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `--url <base>`       | App base URL (overrides `DREAMBASE_URL`; defaults to the prod app)                                                         |
-| `--client <name...>` | Configure only the named client(s): `claude-desktop`, `openai`                                                             |
-| `--scopes <list>`    | Space/comma-separated scopes (default: the server's full catalog — see below; intersected with what the server advertises) |
-| `-y, --yes`          | Skip prompts                                                                                                               |
+| Flag                 | Description                                                                                                 |
+| -------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `--url <base>`       | App base URL (overrides `DREAMBASE_URL`; defaults to the prod app)                                          |
+| `--client <name...>` | Configure only the named client(s): `claude-desktop`, `openai`                                              |
+| `--scopes <list>`    | Space/comma-separated scopes (default: read-only scopes below; intersected with what the server advertises) |
+| `-y, --yes`          | Skip prompts                                                                                                |
 
-The default scope set is every scope the server publishes:
+The default scope set is read-only:
 
 ```
-workspaces:read dashboards:read datasets:read datasets:write connections:read
-health-reports:read health-reports:write skills:read skills:write
+workspaces:read dashboards:read datasets:read connections:read
+health-reports:read skills:read
 ```
 
-Requesting all of them matters because the server's `tools/list` is
-**scope-gated**: a scope you skip doesn't just block a call, it removes the
-matching tools from the connection entirely. Narrow with `--scopes` only when you
-deliberately want a reduced tool surface. The requested set is intersected with
-the server's advertised `scopes_supported`, so an older server that doesn't know
-a scope still authorizes cleanly.
+The server's `tools/list` is **scope-gated**: a scope you skip doesn't just block
+a call, it removes the matching tools from the connection. Opt into write tools
+only when needed, for example:
+
+```bash
+npx @dreambase/mcp install --scopes \
+  workspaces:read,dashboards:read,datasets:read,connections:read,\
+  health-reports:read,health-reports:write,skills:read,skills:write
+```
+
+The requested set is intersected with the server's advertised
+`scopes_supported`, so an older server that doesn't know a scope still
+authorizes cleanly.
 
 ### Environment
 

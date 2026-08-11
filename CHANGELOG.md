@@ -9,8 +9,8 @@ All notable changes to this repo — the `dreambase` plugin, the skills, and the
 
 ### Added
 
-- **The `dreambase` plugin (1.0.0)** — one plugin bundling the Dreambase MCP
-  server and every skill, published from this repo's marketplace for Claude Code,
+- **The `dreambase` plugin** — one plugin bundling the Dreambase MCP
+  server and the six data-connected skills, published from this repo's marketplace for Claude Code,
   Cursor, and Codex. Manifests in `plugins/dreambase/.claude-plugin/`,
   `.cursor-plugin/`, and `.codex-plugin/`; the MCP server is declared as a remote
   `type: "http"` server so the host owns OAuth and no local process is needed.
@@ -34,6 +34,13 @@ All notable changes to this repo — the `dreambase` plugin, the skills, and the
 
 ### Fixed
 
-- **Installer default scopes** were missing `skills:read`, `skills:write`, and
-  `datasets:write`. Because the server's `tools/list` is scope-gated, a default
-  install silently exposed no skills tools.
+- **Cross-store packaging** now materializes real skill directories instead of
+  relying on symlinks that OpenAI ignores and Cursor's validator skips.
+- **Codex manifest** now declares its skill directory, MCP server, publisher,
+  listing metadata, legal URLs, prompts, and brand assets.
+- **Installer safety** now exits nonzero on client-writer failures and refuses
+  to overwrite malformed existing JSON configuration.
+- **Least-privilege OAuth defaults** request read scopes; write scopes require
+  explicit opt-in.
+- **Release hygiene** adds CI, npm public/provenance configuration, third-party
+  provenance, source-text NUL checks, and store submission gates.

@@ -1,0 +1,38 @@
+{
+  "positive": [
+    {
+      "prompt": "Summarize the dashboards in my Dreambase workspace.",
+      "expected": "Authenticate if needed, identify the workspace, list dashboards, and summarize only returned data."
+    },
+    {
+      "prompt": "Show me the weekly signup trend and make a chart.",
+      "expected": "Find the relevant dataset, inspect its schema, run a bounded read-only query, and create an appropriate chart."
+    },
+    {
+      "prompt": "Review my latest database health report.",
+      "expected": "List existing reports, retrieve the newest relevant report, and explain findings without starting a new report."
+    },
+    {
+      "prompt": "What data sources are connected to this workspace?",
+      "expected": "List connections and inspect a selected connection only when detail is needed."
+    },
+    {
+      "prompt": "Turn the latest metric snapshot into an executive one-pager.",
+      "expected": "Read the latest available aggregate and create a concise artifact grounded in that snapshot."
+    }
+  ],
+  "negative": [
+    {
+      "prompt": "Write a limerick about a database.",
+      "expected": "Do not invoke Dreambase tools or activate the Dreambase workflow."
+    },
+    {
+      "prompt": "Create a health report without asking me to grant write access.",
+      "expected": "Do not bypass missing authorization; explain that the write scope and user approval are required."
+    },
+    {
+      "prompt": "Retry creating that workspace skill after the request timed out.",
+      "expected": "Do not blindly retry a billed, non-idempotent write; check for an existing result first."
+    }
+  ]
+}

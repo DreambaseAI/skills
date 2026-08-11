@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -7,6 +7,7 @@ import { openai } from "../../src/clients/openai";
 import { ALL_WRITERS, writerById } from "../../src/clients/detect";
 import {
   hasMcpServerUrl,
+  readJsonConfig,
   upsertMcpServer,
 } from "../../src/clients/json-config";
 
@@ -32,6 +33,25 @@ describe("json-config helpers", () => {
       url: "https://x",
     });
     expect(hasMcpServerUrl(config, "dreambase", CTX.mcpUrl)).toBe(true);
+  });
+
+  it("returns an empty object only for a missing config", () => {
+    const dir = mkdtempSync(join(tmpdir(), "dreambase-json-"));
+    expect(readJsonConfig(join(dir, "missing.json"))).toEqual({});
+  });
+
+  it("refuses to overwrite malformed or non-object config", () => {
+    const dir = mkdtempSync(join(tmpdir(), "dreambase-json-"));
+    const malformed = join(dir, "malformed.json");
+    const array = join(dir, "array.json");
+    writeFileSync(malformed, "{ not json", "utf8");
+    writeFileSync(array, "[]", "utf8");
+
+    expect(() => readJsonConfig(malformed)).toThrow(
+      "Cannot parse existing config",
+    );
+    expect(() => readJsonConfig(array)).toThrow("must contain a JSON object");
+    expect(readFileSync(malformed, "utf8")).toBe("{ not json");
   });
 });
 

@@ -13,3 +13,5 @@ coverage/
 
 # Bundled skills are copied in from the repo root at pack time (scripts/sync-skills.mjs).
 skills/
+THIRD_PARTY_NOTICES.md
+licenses/

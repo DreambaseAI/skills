@@ -2,12 +2,13 @@
   "name": "dreambase",
   "displayName": "Dreambase",
   "version": "1.0.0",
-  "description": "Connect to the Dreambase MCP server and analyze your product data — workspaces, dashboards, datasets, metric snapshots, database health reports, and workspace Skills — with skills for querying it correctly and turning the results into charts, reports, and decks.",
+  "description": "Connect to Dreambase product data and turn dashboards, datasets, metric snapshots, and health reports into charts, reports, and decks.",
   "author": {
     "name": "Dreambase",
     "url": "https://github.com/DreambaseAI"
   },
   "license": "MIT",
+  "logo": "assets/logo.png",
   "keywords": [
     "dreambase",
     "mcp",

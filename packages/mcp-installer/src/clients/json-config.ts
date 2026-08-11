@@ -8,16 +8,32 @@ import {
 } from "node:fs";
 import { dirname } from "node:path";
 
-/** Read a JSON config file, returning `{}` if it is missing or unparseable. */
+/** Read a JSON config file, returning `{}` only when it does not exist. */
 export function readJsonConfig(path: string): Record<string, unknown> {
+  let raw: string;
   try {
-    const parsed = JSON.parse(readFileSync(path, "utf8")) as unknown;
-    return typeof parsed === "object" && parsed !== null
-      ? (parsed as Record<string, unknown>)
-      : {};
-  } catch {
-    return {};
+    raw = readFileSync(path, "utf8");
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === "ENOENT") return {};
+    throw new Error(
+      `Cannot read existing config ${path}: ${err instanceof Error ? err.message : String(err)}`,
+    );
   }
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw) as unknown;
+  } catch (err) {
+    throw new Error(
+      `Cannot parse existing config ${path}; fix or move that file before installing: ${err instanceof Error ? err.message : String(err)}`,
+    );
+  }
+  if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+    throw new Error(
+      `Existing config ${path} must contain a JSON object; it was left unchanged.`,
+    );
+  }
+  return parsed as Record<string, unknown>;
 }
 
 /**

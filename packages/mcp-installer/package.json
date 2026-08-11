@@ -28,10 +28,17 @@
     "dist",
     "skills",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md",
+    "licenses"
   ],
   "engines": {
     "node": ">=20"
+  },
+  "packageManager": "pnpm@9.15.9",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "scripts": {
     "build": "tsup",

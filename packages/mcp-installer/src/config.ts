@@ -45,11 +45,9 @@ export const KEYCHAIN_SERVICE = "dreambase-mcp";
 export const USER_AGENT = "dreambase-mcp";
 
 /**
- * Default scopes requested when the caller does not override `--scopes`. Covers
- * the server's whole advertised catalog, because `tools/list` is scope-gated:
- * a scope left out here doesn't just block a call, it removes the matching tools
- * from the connection entirely, and the user has no way to tell a missing grant
- * from a missing feature.
+ * Default scopes requested when the caller does not override `--scopes`.
+ * Installation is read-only by default; users explicitly opt into write scopes
+ * with `--scopes` when they need mutation tools.
  *
  * The install flow intersects this with the server's advertised
  * `scopes_supported`, so an older server that only knows some of these still
@@ -59,10 +57,7 @@ export const DEFAULT_SCOPES = [
   "workspaces:read",
   "dashboards:read",
   "datasets:read",
-  "datasets:write",
   "connections:read",
   "health-reports:read",
-  "health-reports:write",
   "skills:read",
-  "skills:write",
 ];

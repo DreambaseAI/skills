@@ -17,6 +17,11 @@ then install `dreambase`.
 
 **Codex** — point Codex at this repo's marketplace and install `dreambase`.
 
+```bash
+codex plugin marketplace add DreambaseAI/skills
+codex plugin add dreambase@dreambase
+```
+
 The plugin declares the MCP server as a remote `type: "http"` connection, so your
 host runs the OAuth sign-in itself the first time a Dreambase tool is called — no
 local process, no token to paste. Restart your client after installing, then run
@@ -48,7 +53,9 @@ all of it correctly.
 
 ## The skills
 
-Every skill here ships with the plugin and is also installable on its own.
+The six data-connected skills ship with the plugin and are also installable on
+their own. The two visual-style skills are standalone so the public Dreambase
+plugin stays focused and requests no capabilities unrelated to Dreambase data.
 
 | Skill | What it does |
 |---|---|
@@ -58,6 +65,7 @@ Every skill here ships with the plugin and is also installable on its own.
 | [`dreambase-data-stories`](skills/dreambase-data-stories/) | Design reports, executive summaries, slide decks, infographics, and scrollytelling pieces that blend charts, illustration, typography, and narrative — built on the practices of FT, NYT Graphics, The Pudding, and Reuters |
 | [`dreambase-data-presentation`](skills/dreambase-data-presentation/) | Design and build data presentations — board, investor, QBR, readout, launch, sales, and keynote decks — as interactive self-contained web decks, native .pptx, Google Slides, or a build spec, with verified slide-craft specs, staged chart reveals, and presenter mechanics |
 | [`dreambase-public-reports`](skills/dreambase-public-reports/) | Create disclosure-safe public artifacts from real or sensitive data using transformed visuals, constructive and honest storytelling, and explicit approval for visible percentages, rates, deltas, ratios, or indexes |
+| **Standalone skills** | |
 | [`dreambase-industrial-schematics`](skills/dreambase-industrial-schematics/) | Create dark cinematic industrial/HUD technical schematics — orbital process rings, cel-shaded exploded machinery, holographic 2D/3D wireframe mesh charts with monochromatic hue themes, tick-strip components — as portable SVG/HTML, with zero-dep ring/ruler and 3D-mesh generators |
 | [`dreambase-micrographic-design`](skills/dreambase-micrographic-design/) | Design in the micrographics style — compliance-labelling visual language (rating plates, care tags, spec sheets) used as intentional design: hairline rules, boxed compartments, tick scales, `LABEL: value` pairs, mark clusters, micro-typography, monochrome plus one safety accent — with the certification-mark legal guardrail |
 
@@ -95,7 +103,7 @@ Or copy a directory into your skills folder: `cp -r skills/dreambase-<name> ~/.c
 ## Fallback: the installer
 
 Hosts that can't run the MCP OAuth dance from a config entry — **Claude
-Desktop**, and header-only harnesses like OpenAI's stack — use the CLI in
+Desktop**, and custom header-only harnesses — use the CLI in
 [`packages/mcp-installer/`](packages/mcp-installer/) instead of the plugin:
 
 ```bash
@@ -111,7 +119,8 @@ add a new harness.
 ## Repository structure
 
 ```
-.claude-plugin/marketplace.json   # Marketplace manifests (Claude, Cursor)
+.agents/plugins/marketplace.json  # Codex marketplace
+.claude-plugin/marketplace.json   # Claude marketplace
 .cursor-plugin/marketplace.json
 plugins/dreambase/                # The one shipped plugin
 ├── .claude-plugin/plugin.json
@@ -120,8 +129,9 @@ plugins/dreambase/                # The one shipped plugin
 ├── .mcp.json                     # Remote http MCP server (Claude)
 ├── mcp.json                      # Same, under Cursor's filename
 ├── SETUP.md                      # Guided first-run setup
-├── assets/logo.png               # 512x512 brand mark
-└── skills/                       # Relative symlinks into ../../../skills/
+├── assets/logo.png               # 1024x1024 brand mark
+├── plugin-skills.json            # Public plugin inventory
+└── skills/                       # Generated, symlink-free release payload
 skills/dreambase-<name>/          # Canonical skill tree — one dir per skill
 ├── SKILL.md                      # Required: frontmatter + instructions
 ├── scripts/                      # Optional: executable helpers
@@ -130,12 +140,15 @@ skills/dreambase-<name>/          # Canonical skill tree — one dir per skill
 └── evals/evals.json              # Test prompts + assertions (committed)
 internal/skill-creator/           # Contributor meta-skill — NOT shipped
 packages/mcp-installer/           # The @dreambase/mcp CLI
+scripts/sync-plugin.mjs           # Rebuild/check the release payload
 ```
 
-`skills/` is the single source of truth: the plugin symlinks into it, and the
-installer copies it in at pack time. When working inside this repo, every skill
-is auto-discovered through the `.claude/skills/` symlinks, so you can test them
-in place.
+`skills/` is the single source of truth. The plugin and installer materialize
+their release payloads from it because stores and package archives cannot safely
+rely on cross-directory symlinks. Edit only the canonical tree, then run
+`pnpm sync:plugin`; CI rejects stale copies and symlinks. When working inside
+this repo, every skill is auto-discovered through the `.claude/skills/`
+symlinks, so you can test them in place.
 
 ## Contributing
 

@@ -51,7 +51,9 @@ export async function runInstall(opts: InstallOptions): Promise<number> {
     await runOwnedFlow(d, opts);
   }
 
-  // Write each client's config.
+  // Write each client's config. Keep trying independent clients, but report a
+  // failed install to callers if any requested target could not be configured.
+  const failedWriters: string[] = [];
   for (const writer of selected) {
     try {
       const result = await writer.write(ctx);
@@ -61,6 +63,7 @@ export async function runInstall(opts: InstallOptions): Promise<number> {
         console.log(indent(result.note));
       }
     } catch (err) {
+      failedWriters.push(writer.displayName);
       console.error(
         `  ✗ ${writer.displayName}: ${err instanceof Error ? err.message : String(err)}`,
       );
@@ -72,6 +75,14 @@ export async function runInstall(opts: InstallOptions): Promise<number> {
   const skillResults = await installSkills();
   for (const r of skillResults) {
     console.log(`  ✓ skills → ${r.dir} (${r.installed.join(", ")})`);
+  }
+
+  if (failedWriters.length > 0) {
+    console.error(
+      `\nSetup incomplete: failed to configure ${failedWriters.join(", ")}. ` +
+        `Fix the errors above and run the installer again.`,
+    );
+    return 1;
   }
 
   console.log(`\nDone. Run \`dreambase-mcp doctor\` to verify anytime.`);

@@ -53,9 +53,9 @@ all of it correctly.
 
 ## The skills
 
-The six data-connected skills ship with the plugin and are also installable on
-their own. The two visual-style skills are standalone so the public Dreambase
-plugin stays focused and requests no capabilities unrelated to Dreambase data.
+All nine canonical skills ship with the plugin and are also installable on their
+own. This preserves the complete root skillset while adding plugin-based
+installation.
 
 | Skill | What it does |
 |---|---|
@@ -65,9 +65,9 @@ plugin stays focused and requests no capabilities unrelated to Dreambase data.
 | [`dreambase-data-stories`](skills/dreambase-data-stories/) | Design reports, executive summaries, slide decks, infographics, and scrollytelling pieces that blend charts, illustration, typography, and narrative — built on the practices of FT, NYT Graphics, The Pudding, and Reuters |
 | [`dreambase-data-presentation`](skills/dreambase-data-presentation/) | Design and build data presentations — board, investor, QBR, readout, launch, sales, and keynote decks — as interactive self-contained web decks, native .pptx, Google Slides, or a build spec, with verified slide-craft specs, staged chart reveals, and presenter mechanics |
 | [`dreambase-public-reports`](skills/dreambase-public-reports/) | Create disclosure-safe public artifacts from real or sensitive data using transformed visuals, constructive and honest storytelling, and explicit approval for visible percentages, rates, deltas, ratios, or indexes |
-| **Standalone skills** | |
 | [`dreambase-industrial-schematics`](skills/dreambase-industrial-schematics/) | Create dark cinematic industrial/HUD technical schematics — orbital process rings, cel-shaded exploded machinery, holographic 2D/3D wireframe mesh charts with monochromatic hue themes, tick-strip components — as portable SVG/HTML, with zero-dep ring/ruler and 3D-mesh generators |
 | [`dreambase-micrographic-design`](skills/dreambase-micrographic-design/) | Design in the micrographics style — compliance-labelling visual language (rating plates, care tags, spec sheets) used as intentional design: hairline rules, boxed compartments, tick scales, `LABEL: value` pairs, mark clusters, micro-typography, monochrome plus one safety accent — with the certification-mark legal guardrail |
+| [`dreambase-skill-creator`](skills/dreambase-skill-creator/) | Create, improve, validate, and evaluate Dreambase agent skills using this repository's conventions and eval loop |
 
 How they compose: `dreambase-mcp` gets the data out.
 `dreambase-data-stories` shapes the narrative artifact,
@@ -131,34 +131,35 @@ plugins/dreambase/                # The one shipped plugin
 ├── SETUP.md                      # Guided first-run setup
 ├── assets/logo.png               # 1024x1024 brand mark
 ├── plugin-skills.json            # Public plugin inventory
-└── skills/                       # Generated, symlink-free release payload
+└── skills/                       # Symlinks to ../../../skills/dreambase-*
 skills/dreambase-<name>/          # Canonical skill tree — one dir per skill
 ├── SKILL.md                      # Required: frontmatter + instructions
 ├── scripts/                      # Optional: executable helpers
 ├── references/                   # Optional: docs loaded on demand
 ├── assets/                       # Optional: templates, files used in output
 └── evals/evals.json              # Test prompts + assertions (committed)
-internal/skill-creator/           # Contributor meta-skill — NOT shipped
 packages/mcp-installer/           # The @dreambase/mcp CLI
-scripts/sync-plugin.mjs           # Rebuild/check the release payload
+scripts/sync-plugin.mjs           # Link/check skills and build store artifacts
+dist/dreambase/                   # Generated, symlink-free store artifact
 ```
 
-`skills/` is the single source of truth. The plugin and installer materialize
-their release payloads from it because stores and package archives cannot safely
-rely on cross-directory symlinks. Edit only the canonical tree, then run
-`pnpm sync:plugin`; CI rejects stale copies and symlinks. When working inside
-this repo, every skill is auto-discovered through the `.claude/skills/`
-symlinks, so you can test them in place.
+`skills/` is the single source of truth. The checked-in plugin links outward to
+every canonical root skill, so there is no second editable copy to drift. Run
+`pnpm sync:plugin` after adding a skill and `pnpm check:plugin` to verify the
+inventory and link targets. Because store uploads must be self-contained, `pnpm
+build:plugin` dereferences the links into the gitignored `dist/dreambase/`
+artifact. The installer similarly materializes its package payload during
+packing.
 
 ## Contributing
 
 Read [`CONTRIBUTING.md`](CONTRIBUTING.md). The short version: open this repo in
-Claude Code and describe the skill you want — the `internal/skill-creator`
+Claude Code and describe the skill you want — the `dreambase-skill-creator`
 meta-skill triggers automatically and walks the full loop (interview → draft →
 test → evaluate → iterate). Validate before committing:
 
 ```bash
-node internal/skill-creator/scripts/validate-skill.mjs --all
+node skills/dreambase-skill-creator/scripts/validate-skill.mjs --all
 ```
 
 ## Conventions

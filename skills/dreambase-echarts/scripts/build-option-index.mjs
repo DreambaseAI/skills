@@ -13,7 +13,6 @@
  * Series variants (arrayItemType) become children of "series" named by variant.
  */
 
-import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -37,25 +36,22 @@ async function load(source) {
   if (/^https?:/.test(source)) {
     const res = await fetch(source);
     if (!res.ok) throw new Error(`fetch failed: ${res.status} ${source}`);
-    const raw = await res.text();
-    return { outline: JSON.parse(raw), raw };
+    return res.json();
   }
-  const raw = readFileSync(source, "utf8");
-  return { outline: JSON.parse(raw), raw };
+  return JSON.parse(readFileSync(source, "utf8"));
 }
 
 const args = process.argv.slice(2);
 const fromIdx = args.indexOf("--from");
 const source = fromIdx !== -1 ? args[fromIdx + 1] : DEFAULT_URL;
 
-const { outline, raw } = await load(source);
+const outline = await load(source);
 if (!Array.isArray(outline.children)) {
   throw new Error("unexpected outline shape: missing top-level children[]");
 }
 
 const index = {
   source,
-  sourceSha256: createHash("sha256").update(raw).digest("hex"),
   generated: new Date().toISOString(),
   root: outline.children.map(compact),
 };

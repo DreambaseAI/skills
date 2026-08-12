@@ -42,9 +42,8 @@ describe("skills", () => {
     expect(bundledSkillNames()).toContain("dreambase-mcp");
   });
 
-  it("does not bundle the contributor-only meta-skill", () => {
-    expect(bundledSkillNames()).not.toContain("dreambase-skill-creator");
-    expect(bundledSkillNames()).not.toContain("skill-creator");
+  it("bundles the canonical skill creator", () => {
+    expect(bundledSkillNames()).toContain("dreambase-skill-creator");
   });
 
   it("installs skills into a target dir and reports status", async () => {

@@ -2,7 +2,7 @@
   "name": "dreambase",
   "displayName": "Dreambase",
   "version": "1.0.0",
-  "description": "Connect to Dreambase product data and turn dashboards, datasets, metric snapshots, and health reports into charts, reports, and decks.",
+  "description": "Connect to Dreambase product data and use the complete Dreambase skill suite for analytics, visualization, reporting, presentations, design, and skill authoring.",
   "author": {
     "name": "Dreambase",
     "url": "https://github.com/DreambaseAI"

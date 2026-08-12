@@ -9,8 +9,9 @@ snapshot of the official Apache ECharts option outline:
 - Upstream project: <https://github.com/apache/echarts>
 - License: Apache License 2.0
 - Copyright: 2017–2026 The Apache Software Foundation
+- Vendored artifact SHA-256:
+  `0ef6fb004a4797fdb11ce9c0edd2d6ab286a3c0562e3b708a691c03a532cd71b`
 
-The generated file records the SHA-256 of the source document used to build it.
 Apache ECharts and ECharts are trademarks of The Apache Software Foundation.
 Dreambase is not endorsed by or affiliated with The Apache Software Foundation.
 

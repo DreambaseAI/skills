@@ -5,14 +5,14 @@
     "url": "https://github.com/DreambaseAI"
   },
   "metadata": {
-    "description": "The Dreambase plugin: the Dreambase MCP server plus the skills for querying it and presenting the results.",
+    "description": "The Dreambase MCP server plus the complete canonical Dreambase skill suite.",
     "version": "1.0.0"
   },
   "plugins": [
     {
       "name": "dreambase",
       "source": "./plugins/dreambase",
-      "description": "Connect to the Dreambase MCP server and analyze your product data — workspaces, dashboards, datasets, metric snapshots, database health reports, and workspace Skills — with skills for querying it correctly and turning the results into charts, reports, and decks.",
+      "description": "Connect to the Dreambase MCP server and use the complete canonical skill suite for product-data analytics, visualization, reports, presentations, visual design, and skill authoring.",
       "version": "1.0.0",
       "author": {
         "name": "Dreambase",

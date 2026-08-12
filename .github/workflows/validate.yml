@@ -22,11 +22,14 @@ jobs:
           cache: pnpm
           cache-dependency-path: packages/mcp-installer/pnpm-lock.yaml
 
-      - name: Validate generated plugin payload and shared metadata
+      - name: Validate canonical plugin links and shared metadata
         run: pnpm check:plugin
 
       - name: Validate skills
-        run: node internal/skill-creator/scripts/validate-skill.mjs --all
+        run: node skills/dreambase-skill-creator/scripts/validate-skill.mjs --all
+
+      - name: Build standalone store artifact
+        run: pnpm build:plugin
 
       - name: Validate Claude manifests
         run: |

@@ -6,26 +6,23 @@ installer** (`packages/mcp-installer/`).
 
 ## Contributing a skill
 
-The authoritative standards live in the meta-skill: **`internal/skill-creator/`**.
-It lives outside `skills/` because it is contributor tooling and must not ship
-as an end-user skill. If you're working in Claude Code, just describe the skill
-you want — the meta-skill triggers automatically and walks the full loop
+The authoritative standards live in
+**`skills/dreambase-skill-creator/`**. If you're working in Claude Code, just
+describe the skill you want — the meta-skill triggers automatically and walks the full loop
 (interview → draft → test → evaluate → iterate).
 
 The short version:
 
-1. Copy `internal/skill-creator/assets/skill-template/` to `skills/dreambase-<name>/`.
+1. Copy `skills/dreambase-skill-creator/assets/skill-template/` to `skills/dreambase-<name>/`.
 2. Fill in `SKILL.md` — frontmatter `name` must match the directory name and carry the `dreambase-` prefix.
-3. Add 2–3 realistic test prompts to `evals/evals.json`, then run the eval loop described in `internal/skill-creator/references/eval-loop.md`.
-4. Add the Claude project symlink so the skill is discoverable in-repo:
-   ```bash
-   ln -s ../../skills/dreambase-<name> .claude/skills/dreambase-<name>
-   ```
-   If it belongs in the focused public plugin, add its name to
-   `plugins/dreambase/plugin-skills.json`, then run `pnpm sync:plugin`.
+3. Add 2–3 realistic test prompts to `evals/evals.json`, then run the eval loop described in `skills/dreambase-skill-creator/references/eval-loop.md`.
+4. Add its name to `plugins/dreambase/plugin-skills.json`, then run `pnpm
+   sync:plugin` to create the matching plugin symlink. Every canonical root
+   skill ships with the plugin, and `.claude/skills` already points at the full
+   root tree for in-repo discovery.
 5. Validate before committing:
    ```bash
-   node internal/skill-creator/scripts/validate-skill.mjs --all
+   node skills/dreambase-skill-creator/scripts/validate-skill.mjs --all
    ```
 6. Commit the skill *with* its `evals/`; never commit `*-workspace/` run outputs (gitignored).
 7. List it in the skills table in `README.md`.
@@ -36,14 +33,18 @@ retry it).
 
 ## Changing the plugin
 
-`skills/` is the single source of truth. `plugins/dreambase/skills/` is a
-generated, committed release payload because not every store follows symlinks.
-Never edit that copy directly; rebuild and verify it with:
+`skills/` is the single source of truth. Each entry under
+`plugins/dreambase/skills/` is a committed symlink back to that root. Never put
+a second copy of a skill inside the plugin; rebuild and verify the links with:
 
 ```bash
 pnpm sync:plugin
 pnpm check:plugin
 ```
+
+Stores that do not preserve or follow symlinks receive a generated standalone
+artifact. Build it with `pnpm build:plugin` and upload/package
+`dist/dreambase/`, never the source plugin directory.
 
 After editing any manifest:
 

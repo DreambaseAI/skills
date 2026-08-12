@@ -10,7 +10,7 @@ All notable changes to this repo — the `dreambase` plugin, the skills, and the
 ### Added
 
 - **The `dreambase` plugin** — one plugin bundling the Dreambase MCP
-  server and the six data-connected skills, published from this repo's marketplace for Claude Code,
+  server and all nine canonical skills, published from this repo's marketplace for Claude Code,
   Cursor, and Codex. Manifests in `plugins/dreambase/.claude-plugin/`,
   `.cursor-plugin/`, and `.codex-plugin/`; the MCP server is declared as a remote
   `type: "http"` server so the host owns OAuth and no local process is needed.
@@ -28,14 +28,16 @@ All notable changes to this repo — the `dreambase` plugin, the skills, and the
 - **Installer scope narrowed to header-only hosts.** Claude Code and Cursor are
   served by the plugin, so their client writers were removed; the installer now
   covers Claude Desktop and header-only harnesses via the shim.
-- **`skills/dreambase-skill-creator/` moved to `internal/skill-creator/`** — the
-  contributor meta-skill is no longer bundled into the shipped plugin.
+- **Root skills remain canonical and complete.** Every skill present on `main`
+  remains byte-for-byte at `skills/`, and the additive `dreambase-mcp` skill is
+  included alongside them.
 - **Root `README.md` rewritten** around plugin-first installation.
 
 ### Fixed
 
-- **Cross-store packaging** now materializes real skill directories instead of
-  relying on symlinks that OpenAI ignores and Cursor's validator skips.
+- **Cross-store packaging** keeps the checked-in plugin DRY with links to the
+  canonical root skills, then materializes real directories in
+  `dist/dreambase/` for stores that ignore or reject symlinks.
 - **Codex manifest** now declares its skill directory, MCP server, publisher,
   listing metadata, legal URLs, prompts, and brand assets.
 - **Installer safety** now exits nonzero on client-writer failures and refuses

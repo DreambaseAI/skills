@@ -68,8 +68,7 @@ Produce a single JSON object conforming to the ECharts `EChartsOption` shape. Th
    node scripts/echarts-option.mjs series-sankey --depth 2   # subtree of valid options
    node scripts/echarts-option.mjs --find sampling            # search by name
    ```
-   The index is vendored for offline use; `assets/option-index.json` records its
-   canonical source URL, generation time, and source SHA-256.
+   The index is vendored (offline, versioned to the ECharts release in `assets/option-index.json`).
 4. Author the config against `references/core-components.md` for axes/tooltip/legend/grid/dataZoom/visualMap/dataset details.
 5. Validate (rule above), then return the JSON.
 

@@ -18,5 +18,6 @@ __pycache__/
 node_modules/
 
 # Installer build/pack artifacts
+dist/
 packages/mcp-installer/dist/
 packages/mcp-installer/skills/

@@ -5,6 +5,7 @@
   "packageManager": "pnpm@9.15.9",
   "scripts": {
     "sync:plugin": "node scripts/sync-plugin.mjs",
+    "build:plugin": "node scripts/sync-plugin.mjs --build",
     "check:plugin": "node scripts/sync-plugin.mjs --check && node scripts/validate-release.mjs"
   }
 }

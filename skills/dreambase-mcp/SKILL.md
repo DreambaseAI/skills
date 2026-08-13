@@ -23,6 +23,11 @@ A missing tool can mean an older deployment, an experimental/audience gate, or
 a missing OAuth scope. Compare the available tools with `whoami`; report the
 evidence instead of asserting one cause.
 
+Some enriched write responses also expose read-protected data. `save_dataset`
+requires both `datasets:read` and `datasets:write` because it returns exact
+preview rows; `create_skill` requires both `skills:read` and `skills:write`
+because it returns full technical context and connected sources.
+
 ## Route by intent
 
 | Need | Route |

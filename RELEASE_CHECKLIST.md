@@ -37,6 +37,11 @@ not submit or publish until every applicable item below is complete.
       are enforced in code.
 - [ ] `get_connection` discloses that it may perform a live remote scan.
 - [ ] `create_skill` is marked billed, non-idempotent, and unsafe to blind-retry.
+- [ ] Enriched write tools require their paired read scope: `save_dataset`
+      requires `datasets:read` + `datasets:write`, and `create_skill` requires
+      `skills:read` + `skills:write`.
+- [ ] `save_dataset` preserves legacy handle fields at the response root and
+      adds `preview` without wrapping them in a new `handle` object.
 - [ ] `update_skill`, dataset writes, and health-report creation accurately
       describe mutation, overwrite, and retry behavior.
 - [ ] Default consent is least privilege and write scopes are requested only

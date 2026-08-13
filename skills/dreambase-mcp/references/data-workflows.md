@@ -77,9 +77,11 @@ Handle each response once:
 
 `save_dataset` creates a scratch snapshot with roughly a seven-day TTL. Omit
 `datasetId` to create; pass an existing scratch ID to re-execute in place. A
-successful response includes a handle and a bounded preview of the exact saved
-rows. Use the preview for immediate validation and `query_dataset` for a
-larger or aggregated inspection.
+successful response preserves the dataset handle fields at the top level and
+adds a bounded `preview` of the exact saved rows. It requires both
+`datasets:read` and `datasets:write`: the preview must not become a read channel
+for a write-only token. Use the preview for immediate validation and
+`query_dataset` for a larger or aggregated inspection.
 
 Creation is not idempotent. After a timeout, dropped connection, or unclear
 server failure, call `list_datasets` and look for the intended name before any

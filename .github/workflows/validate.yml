@@ -47,6 +47,7 @@ jobs:
         working-directory: packages/mcp-installer
         run: |
           pnpm install --frozen-lockfile
+          pnpm sync:skills
           pnpm typecheck
           pnpm lint
           pnpm format:check

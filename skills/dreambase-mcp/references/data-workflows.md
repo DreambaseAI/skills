@@ -48,12 +48,14 @@ schema in `discoveryMarkdown`; use `connectionIds` to narrow cost and reach.
 Use relevant `get_skill` bodies as `topicContexts` when business semantics
 already exist.
 
-Planning is read-only. `plan_datasets` may read enabled connected sources to
-validate its reasoning, but it only returns potential dataset definitions; it
-does not persist them. A source query may use POST as its transport (for
-example, a read-oriented query API), which does not turn planning into a
-Dreambase write. Only an explicit `save_dataset` call creates or replaces a
-dataset.
+Planning is non-persistent. `plan_datasets` only returns potential dataset
+definitions; it does not create or replace a Dreambase dataset. Only an
+explicit `save_dataset` call does that. Planning can still execute enabled API
+endpoints or MCP tools to inspect connected sources. The planner is instructed
+to use read-oriented operations, including query APIs that use POST as their
+transport, but the runtime does not deterministically classify every enabled
+POST endpoint or MCP tool as read-only. Treat the call as open-world rather
+than promising that it cannot affect a connected system.
 
 Always read `findings` before acting. They disclose load-bearing choices such
 as join direction, grain, ambiguity resolution, pagination constraints, and

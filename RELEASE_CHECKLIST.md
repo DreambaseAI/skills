@@ -32,8 +32,9 @@ not submit or publish until every applicable item below is complete.
 
 - [ ] Every tool declares accurate `readOnlyHint`, `openWorldHint`, and
       `destructiveHint` values with required justifications.
-- [ ] `plan_datasets` is advertised as read-only, non-destructive, idempotent,
-      and open-world; its description says only `save_dataset` persists plans.
+- [ ] `plan_datasets` says only `save_dataset` persists plans, while its risk
+      hints conservatively cover connected API/MCP probes until read semantics
+      are enforced in code.
 - [ ] `get_connection` discloses that it may perform a live remote scan.
 - [ ] `create_skill` is marked billed, non-idempotent, and unsafe to blind-retry.
 - [ ] `update_skill`, dataset writes, and health-report creation accurately

@@ -1,0 +1,13 @@
+interface:
+  display_name: "Use Dreambase"
+  short_description: "Plan, query, and operate Dreambase data"
+  default_prompt: "Use $dreambase-mcp to answer this question from my Dreambase data."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "dreambase"
+      description: "Dreambase workspaces, connected data, planning, and analytics"
+      transport: "streamable_http"
+      url: "https://app.dreambase.com/mcp"
+policy:
+  allow_implicit_invocation: true

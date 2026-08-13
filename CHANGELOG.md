@@ -15,9 +15,10 @@ All notable changes to this repo — the `dreambase` plugin, the skills, and the
   `.cursor-plugin/`, and `.codex-plugin/`; the MCP server is declared as a remote
   `type: "http"` server so the host owns OAuth and no local process is needed.
 - **`dreambase-mcp` skill** — the usage contract for the MCP server: call order,
-  the DuckDB dialect and result caps on `query_dataset`, connection discovery,
-  async health-report polling, retry rules for non-idempotent writes, and the
-  meaning of each error code.
+  the DuckDB dialect and result caps on `query_dataset`, schema search,
+  `plan_datasets`, connector setup, async health-report polling, retry rules
+  for non-idempotent writes, and the meaning of each error code. Focused
+  reference files keep the top-level routing guidance compact.
 - **`plugins/dreambase/SETUP.md`** — walks a user through account creation,
   connecting a Supabase project, OAuth consent, and verification.
 - **`packages/mcp-installer/`** — the `@dreambase/mcp` CLI, moved in from its own
@@ -42,6 +43,8 @@ All notable changes to this repo — the `dreambase` plugin, the skills, and the
   listing metadata, legal URLs, prompts, and brand assets.
 - **Installer safety** now exits nonzero on client-writer failures and refuses
   to overwrite malformed existing JSON configuration.
+- **Installer MCP transport handling** accepts both JSON and Streamable HTTP
+  SSE tool responses, including progress events before the terminal result.
 - **Least-privilege OAuth defaults** request read scopes; write scopes require
   explicit opt-in.
 - **Release hygiene** adds CI, npm public/provenance configuration, third-party

@@ -1,7 +1,7 @@
 {
   "name": "dreambase",
   "version": "1.0.0",
-  "description": "Connect to Dreambase product data and use the complete Dreambase skill suite for analytics, visualization, reporting, presentations, design, and skill authoring.",
+  "description": "Connect, plan, query, and present data from Dreambase workspaces and their Supabase, API, and MCP sources.",
   "author": {
     "name": "Dreambase",
     "url": "https://dreambase.com"
@@ -21,8 +21,8 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Dreambase",
-    "shortDescription": "Dreambase data tools and the complete skill suite.",
-    "longDescription": "Connect to Dreambase workspaces, dashboards, datasets, metric snapshots, and database health reports, with the complete canonical skill suite for analytics, visualization, reports, presentations, design, and skill authoring.",
+    "shortDescription": "Plan, analyze, and present Dreambase data.",
+    "longDescription": "Use existing Dreambase datasets or plan validated new ones from connected Supabase, API, and MCP sources, connect missing data providers, inspect dashboards and health reports, and turn verified results into charts, reports, and presentations.",
     "developerName": "Dreambase",
     "category": "Data & Analytics",
     "capabilities": ["Interactive", "Read", "Write"],
@@ -30,9 +30,9 @@
     "privacyPolicyURL": "https://app.dreambase.com/privacy",
     "termsOfServiceURL": "https://app.dreambase.com/terms",
     "defaultPrompt": [
-      "Summarize my Dreambase dashboards.",
-      "Chart the latest trends in my datasets.",
-      "Review my latest database health report."
+      "Plan and build the datasets this analysis needs.",
+      "Connect a data source and analyze its key trends.",
+      "Review my dashboards and latest database health report."
     ],
     "brandColor": "#6954D9",
     "composerIcon": "./assets/logo.png",

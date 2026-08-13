@@ -6,18 +6,15 @@ not submit or publish until every applicable item below is complete.
 
 ## Automated repository gates
 
-- [ ] `pnpm sync:plugin` produces no diff and every plugin skill resolves to its
-      matching canonical root skill.
-- [ ] `pnpm check:plugin` passes.
+- [ ] `pnpm check:plugin` passes and confirms every skill in
+      `store/main-skills.json` still exists.
 - [ ] `pnpm build:plugin` produces a complete, symlink-free
       `dist/dreambase/` artifact.
 - [ ] Claude and Cursor marketplace validators pass.
-- [ ] All skill validators and installer checks pass.
-- [ ] `npm pack --dry-run` contains only intended files.
+- [ ] All skill validators pass.
 - [ ] `node scripts/check-release-urls.mjs` passes against production.
 - [ ] The `Build plugin submission artifact` workflow produces the ZIP used for
-      portal upload; do not upload or zip `plugins/dreambase/` directly because
-      its skill entries intentionally are symlinks.
+      portal upload; use that exact validated artifact for manual submissions.
 
 ## Hosted and legal gates
 
@@ -51,4 +48,4 @@ not submit or publish until every applicable item below is complete.
 - [ ] Record the required end-to-end demo using the reviewer account.
 - [ ] Provide reviewer credentials through each store's secure submission flow.
 - [ ] Capture screenshots and descriptions from the exact release artifact.
-- [ ] Tag plugin and npm versions intentionally; do not infer one from the other.
+- [ ] Tag the plugin version intentionally after the store artifacts are final.

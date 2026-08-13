@@ -27,7 +27,7 @@ host runs the OAuth sign-in itself the first time a Dreambase tool is called —
 local process, no token to paste. Restart your client after installing, then run
 `whoami` followed by `list_workspaces` to confirm it works.
 
-New to Dreambase? [`plugins/dreambase/SETUP.md`](plugins/dreambase/SETUP.md)
+New to Dreambase? [`SETUP.md`](SETUP.md)
 walks through creating an account, connecting a Supabase project, and completing
 consent.
 
@@ -39,9 +39,10 @@ consent.
 |---|---|
 | Identity | `whoami`, `list_workspaces` |
 | Dashboards | `list_dashboards` |
-| Datasets | `list_datasets`, `get_dataset`, `query_dataset` |
+| Datasets | `list_datasets`, `get_dataset`, `query_dataset`, `plan_datasets`, `save_dataset` |
 | Metric snapshots | `list_aggregates`, `get_aggregate` |
-| Connections | `list_connections`, `get_connection` |
+| Connections | `list_connections`, `get_connection`, `search_connection` |
+| Connector setup | `list_connectors`, `request_connector_connection`, `get_connection_request` |
 | Database health | `create_health_report`, `list_health_reports`, `get_health_report` |
 | Workspace Skills | `list_skills`, `get_skill`, `create_skill`, `update_skill` |
 
@@ -100,56 +101,38 @@ npx skills add DreambaseAI/skills --all
 Or copy a directory into your skills folder: `cp -r skills/dreambase-<name> ~/.claude/skills/`
 (per-user), or into `<your-project>/.claude/skills/` (per-project).
 
-## Fallback: the installer
-
-Hosts that can't run the MCP OAuth dance from a config entry — **Claude
-Desktop**, and custom header-only harnesses — use the CLI in
-[`packages/mcp-installer/`](packages/mcp-installer/) instead of the plugin:
-
-```bash
-npx @dreambase/mcp
-```
-
-It runs the OAuth 2.1 + PKCE sign-in itself, stores the token in the OS keychain
-(with a `0600` file fallback), points the client at a local stdio↔HTTP shim that
-injects the bearer on every call, and copies the skills into `~/.claude/skills/`.
-See its [README](packages/mcp-installer/README.md) for flags, scopes, and how to
-add a new harness.
-
 ## Repository structure
 
 ```
 .agents/plugins/marketplace.json  # Codex marketplace
-.claude-plugin/marketplace.json   # Claude marketplace
-.cursor-plugin/marketplace.json
-plugins/dreambase/                # The one shipped plugin
-├── .claude-plugin/plugin.json
-├── .cursor-plugin/plugin.json
-├── .codex-plugin/plugin.json
-├── .mcp.json                     # Remote http MCP server (Claude)
-├── mcp.json                      # Same, under Cursor's filename
-├── SETUP.md                      # Guided first-run setup
-├── assets/logo.png               # 1024x1024 brand mark
-├── plugin-skills.json            # Public plugin inventory
-└── skills/                       # Symlinks to ../../../skills/dreambase-*
-skills/dreambase-<name>/          # Canonical skill tree — one dir per skill
+.claude-plugin/
+├── marketplace.json             # Claude marketplace
+└── plugin.json                  # Claude plugin manifest
+.cursor-plugin/
+├── marketplace.json             # Cursor marketplace
+└── plugin.json                  # Cursor plugin manifest
+.codex-plugin/plugin.json        # Codex plugin manifest
+.mcp.json                        # Remote HTTP MCP server (Claude/Codex)
+mcp.json                         # Remote HTTP MCP server (Cursor)
+assets/logo.png                  # 1024x1024 brand mark
+SETUP.md                         # Guided first-run setup
+skills/dreambase-<name>/         # Canonical skill and plugin component
 ├── SKILL.md                      # Required: frontmatter + instructions
 ├── scripts/                      # Optional: executable helpers
 ├── references/                   # Optional: docs loaded on demand
 ├── assets/                       # Optional: templates, files used in output
 └── evals/evals.json              # Test prompts + assertions (committed)
-packages/mcp-installer/           # The @dreambase/mcp CLI
-scripts/sync-plugin.mjs           # Link/check skills and build store artifacts
+scripts/build-plugin.mjs          # Validate and build store artifacts
+store/main-skills.json            # Cannot-delete baseline for pre-release skills
 dist/dreambase/                   # Generated, symlink-free store artifact
 ```
 
-`skills/` is the single source of truth. The checked-in plugin links outward to
-every canonical root skill, so there is no second editable copy to drift. Run
-`pnpm sync:plugin` after adding a skill and `pnpm check:plugin` to verify the
-inventory and link targets. Because store uploads must be self-contained, `pnpm
-build:plugin` dereferences the links into the gitignored `dist/dreambase/`
-artifact. The installer similarly materializes its package payload during
-packing.
+This is a single-plugin repository, so the repository root is also the plugin
+root. `skills/` is both the canonical source and the standard auto-discovered
+plugin component directory—there is no copied or symlinked second tree to
+drift. `pnpm check:plugin` verifies the manifests and guarantees every skill in
+the pre-release `main` inventory remains present. `pnpm build:plugin` creates a
+self-contained `dist/dreambase/` submission artifact.
 
 ## Contributing
 

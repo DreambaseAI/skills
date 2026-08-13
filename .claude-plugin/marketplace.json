@@ -11,7 +11,7 @@
   "plugins": [
     {
       "name": "dreambase",
-      "source": "./plugins/dreambase",
+      "source": "./",
       "description": "Connect to the Dreambase MCP server and use the complete canonical skill suite for product-data analytics, visualization, reports, presentations, visual design, and skill authoring.",
       "version": "1.0.0",
       "author": {

@@ -1,8 +1,7 @@
 # Contributing
 
-This repo ships three things from one tree: the **`dreambase` plugin**
-(`plugins/dreambase/`), the **skills** (`skills/`), and the **`@dreambase/mcp`
-installer** (`packages/mcp-installer/`).
+This repo is the source for one **`dreambase` plugin**. The repository root is
+the plugin root, and `skills/` contains its canonical skills.
 
 ## Contributing a skill
 
@@ -16,10 +15,9 @@ The short version:
 1. Copy `skills/dreambase-skill-creator/assets/skill-template/` to `skills/dreambase-<name>/`.
 2. Fill in `SKILL.md` — frontmatter `name` must match the directory name and carry the `dreambase-` prefix.
 3. Add 2–3 realistic test prompts to `evals/evals.json`, then run the eval loop described in `skills/dreambase-skill-creator/references/eval-loop.md`.
-4. Add its name to `plugins/dreambase/plugin-skills.json`, then run `pnpm
-   sync:plugin` to create the matching plugin symlink. Every canonical root
-   skill ships with the plugin, and `.claude/skills` already points at the full
-   root tree for in-repo discovery.
+4. Every canonical skill ships automatically from `skills/`. Add its name to
+   the README table. Do not remove or rename an entry in
+   `store/main-skills.json`; that file protects the pre-release inventory.
 5. Validate before committing:
    ```bash
    node skills/dreambase-skill-creator/scripts/validate-skill.mjs --all
@@ -33,49 +31,30 @@ retry it).
 
 ## Changing the plugin
 
-`skills/` is the single source of truth. Each entry under
-`plugins/dreambase/skills/` is a committed symlink back to that root. Never put
-a second copy of a skill inside the plugin; rebuild and verify the links with:
+`skills/` is both the single source of truth and the standard plugin component
+directory. Validate the root plugin with:
 
 ```bash
-pnpm sync:plugin
 pnpm check:plugin
 ```
 
-Stores that do not preserve or follow symlinks receive a generated standalone
-artifact. Build it with `pnpm build:plugin` and upload/package
-`dist/dreambase/`, never the source plugin directory.
+Build the exact standalone submission artifact with `pnpm build:plugin` and
+upload/package `dist/dreambase/`.
 
 After editing any manifest:
 
 ```bash
-claude plugin validate ./plugins/dreambase --strict
+claude plugin validate ./.claude-plugin/plugin.json --strict
 claude plugin validate ./.claude-plugin/marketplace.json --strict
-node scripts/sync-plugin.mjs --check
+node scripts/build-plugin.mjs
 node scripts/validate-release.mjs
 ```
 
 Keep `version` identical across
-`plugins/dreambase/.claude-plugin/plugin.json`, `.cursor-plugin/plugin.json`,
+`.claude-plugin/plugin.json`, `.cursor-plugin/plugin.json`,
 `.codex-plugin/plugin.json`, and the Claude/Cursor marketplace files. The Codex
 marketplace entry does not duplicate the version. Record every release in
 `CHANGELOG.md`.
 
 See `RELEASE_CHECKLIST.md` for store-specific legal, OAuth, annotation, demo,
 and test-case gates that cannot be verified from this repository alone.
-
-## Changing the installer
-
-```bash
-cd packages/mcp-installer
-pnpm install
-pnpm sync:skills   # materialize <package>/skills from the repo root
-pnpm typecheck && pnpm lint && pnpm format:check && pnpm test
-```
-
-Scope check before adding a client writer: hosts that can run the MCP OAuth dance
-from a config entry (Claude Code, Cursor, Codex) belong to the plugin, not here.
-The installer covers hosts that can't. For a new header-only harness, copy
-`src/clients/openai.ts` — the reference-config + `shimCommand()` pattern.
-
-`<package>/skills` is generated and gitignored; edit the tree at the repo root.

@@ -52,8 +52,8 @@ connected.
 If the browser never opens, or the client shows the server as failed:
 
 - Confirm the client supports remote (`type: "http"`) MCP servers with OAuth.
-  Claude Code and Cursor do. Claude Desktop does not from a config file — use the
-  installer instead (`npx @dreambase/mcp`, see the repo README).
+  If it does not, this release does not support that client; use a supported
+  plugin host rather than adding a bearer token or custom shim by hand.
 - Check the machine can reach `https://app.dreambase.com/mcp`.
 - Re-run the client's own reconnect/re-authorize action rather than editing
   config by hand.

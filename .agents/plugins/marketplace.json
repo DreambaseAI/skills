@@ -8,7 +8,7 @@
       "name": "dreambase",
       "source": {
         "source": "local",
-        "path": "./plugins/dreambase"
+        "path": "./"
       },
       "policy": {
         "installation": "AVAILABLE",

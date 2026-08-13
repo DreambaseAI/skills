@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Validate source package
+      - name: Validate root plugin
         run: pnpm check:plugin
       - name: Materialize standalone plugin
         run: pnpm build:plugin

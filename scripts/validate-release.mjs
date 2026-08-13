@@ -5,16 +5,16 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const pluginRoot = join(repoRoot, "plugins", "dreambase");
+const pluginRoot = repoRoot;
 const errors = [];
 const readJson = (path) =>
   JSON.parse(readFileSync(join(repoRoot, path), "utf8"));
 const error = (message) => errors.push(message);
 
 const manifests = [
-  "plugins/dreambase/.claude-plugin/plugin.json",
-  "plugins/dreambase/.cursor-plugin/plugin.json",
-  "plugins/dreambase/.codex-plugin/plugin.json",
+  ".claude-plugin/plugin.json",
+  ".cursor-plugin/plugin.json",
+  ".codex-plugin/plugin.json",
   ".claude-plugin/marketplace.json",
   ".cursor-plugin/marketplace.json",
 ];
@@ -26,7 +26,7 @@ if (new Set(versions.map(([, version]) => version)).size !== 1) {
   error(`manifest versions differ: ${JSON.stringify(versions)}`);
 }
 
-const codex = readJson("plugins/dreambase/.codex-plugin/plugin.json");
+const codex = readJson(".codex-plugin/plugin.json");
 for (const field of ["name", "version", "description", "author", "interface"]) {
   if (!codex[field]) error(`Codex manifest is missing ${field}`);
 }
@@ -34,6 +34,24 @@ if (codex.skills !== "./skills/")
   error('Codex manifest skills must be "./skills/"');
 if (codex.mcpServers !== "./.mcp.json") {
   error('Codex manifest mcpServers must declare "./.mcp.json"');
+}
+
+const codexMarketplace = readJson(".agents/plugins/marketplace.json");
+if (
+  codexMarketplace.plugins?.length !== 1 ||
+  codexMarketplace.plugins[0]?.source?.path !== "./"
+) {
+  error('Codex marketplace must point its single plugin at the repository root');
+}
+
+for (const path of [
+  ".claude-plugin/marketplace.json",
+  ".cursor-plugin/marketplace.json",
+]) {
+  const marketplace = readJson(path);
+  if (marketplace.plugins?.length !== 1 || marketplace.plugins[0]?.source !== "./") {
+    error(`${path} must point its single plugin at the repository root`);
+  }
 }
 
 const interfaceFields = [
@@ -68,8 +86,8 @@ for (const urlField of [
   }
 }
 
-const mcp = readJson("plugins/dreambase/.mcp.json");
-const cursorMcp = readJson("plugins/dreambase/mcp.json");
+const mcp = readJson(".mcp.json");
+const cursorMcp = readJson("mcp.json");
 if (JSON.stringify(mcp) !== JSON.stringify(cursorMcp)) {
   error(".mcp.json and mcp.json differ");
 }

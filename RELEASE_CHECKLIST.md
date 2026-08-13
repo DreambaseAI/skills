@@ -42,6 +42,10 @@ not submit or publish until every applicable item below is complete.
       `skills:read` + `skills:write`.
 - [ ] `save_dataset` preserves legacy handle fields at the response root and
       adds `preview` without wrapping them in a new `handle` object.
+- [ ] `list_datasets` is an always-compact manifest; profile statistics are
+      available through `get_dataset`, not a `verbose` flag.
+- [ ] `create_skill` returns a stable `detailAvailable` discriminator even when
+      post-create detail hydration fails.
 - [ ] `update_skill`, dataset writes, and health-report creation accurately
       describe mutation, overwrite, and retry behavior.
 - [ ] Default consent is least privilege and write scopes are requested only

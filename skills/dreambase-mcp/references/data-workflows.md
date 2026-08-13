@@ -12,8 +12,9 @@ resources, follow this file.
 ## Existing data versus a new data need
 
 Call `list_datasets` first for a vague question. Handles contain enough schema
-to decide whether an existing dataset answers it. Profile statistics are omitted
-by default; request `verbose: true` only when they are necessary.
+to decide whether an existing dataset answers it. The list is always a compact
+manifest without profile statistics; call `get_dataset` for one selected
+dataset when those statistics are necessary.
 
 - A matching dataset exists: use `query_dataset`.
 - No matching dataset exists, or it lacks required fields: discover connections

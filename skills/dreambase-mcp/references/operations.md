@@ -26,7 +26,9 @@ but useful semantic evidence.
 failure, list newest skills and look for a match before considering a retry.
 A successful creation returns bounded full detail, including technical context
 and connected sources, so the tool requires both `skills:read` and
-`skills:write`.
+`skills:write`. Inspect `detailAvailable`: when false, creation still succeeded,
+but detail hydration failed; call `get_skill` with the returned `skillId` before
+using its technical context or connected sources.
 
 `update_skill` is a partial update. Read the current skill first; pass only the
 fields that should change. An explicit `null` clears a nullable field.

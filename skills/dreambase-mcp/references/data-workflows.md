@@ -48,6 +48,13 @@ schema in `discoveryMarkdown`; use `connectionIds` to narrow cost and reach.
 Use relevant `get_skill` bodies as `topicContexts` when business semantics
 already exist.
 
+Planning is read-only. `plan_datasets` may read enabled connected sources to
+validate its reasoning, but it only returns potential dataset definitions; it
+does not persist them. A source query may use POST as its transport (for
+example, a read-oriented query API), which does not turn planning into a
+Dreambase write. Only an explicit `save_dataset` call creates or replaces a
+dataset.
+
 Always read `findings` before acting. They disclose load-bearing choices such
 as join direction, grain, ambiguity resolution, pagination constraints, and
 reuse of an existing dataset.

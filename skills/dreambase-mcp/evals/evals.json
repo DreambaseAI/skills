@@ -33,10 +33,11 @@
       "id": 3,
       "name": "planner-clarification-without-write-authorization",
       "prompt": "Figure out what dataset would answer whether activation improved. Do not create anything yet. The planner returns a clarification question plus one completed plan.",
-      "expected_output": "The agent reads findings, retains the partial plan without saving it, and relays the planner's clarification verbatim. The explicit no-create instruction overrides the server guide's partial-plan convenience path.",
+      "expected_output": "The agent may use the read-only planner, reads findings, retains the partial plan without saving it, and relays the planner's clarification verbatim. The explicit no-create instruction prohibits save_dataset, not plan_datasets.",
       "files": [],
       "assertions": [
         "The agent does not call save_dataset",
+        "The agent recognizes that plan_datasets itself does not persist or mutate a dataset",
         "The agent reads findings before responding",
         "The planner question is relayed verbatim",
         "The completed plan is retained or summarized without claiming it was saved"

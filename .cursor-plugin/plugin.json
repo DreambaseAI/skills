@@ -1,0 +1,23 @@
+{
+  "name": "dreambase",
+  "displayName": "Dreambase",
+  "version": "1.0.0",
+  "description": "Connect, plan, query, and present data from Dreambase workspaces and their Supabase, API, and MCP sources.",
+  "author": {
+    "name": "Dreambase",
+    "url": "https://github.com/DreambaseAI"
+  },
+  "license": "MIT",
+  "logo": "assets/logo.png",
+  "keywords": [
+    "dreambase",
+    "mcp",
+    "analytics",
+    "dashboards",
+    "supabase",
+    "charts",
+    "echarts",
+    "data-visualization",
+    "reports"
+  ]
+}

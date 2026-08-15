@@ -1,0 +1,41 @@
+{
+  "name": "dreambase",
+  "version": "1.0.0",
+  "description": "Connect, plan, query, and present data from Dreambase workspaces and their Supabase, API, and MCP sources.",
+  "author": {
+    "name": "Dreambase",
+    "url": "https://dreambase.com"
+  },
+  "homepage": "https://app.dreambase.com",
+  "repository": "https://github.com/DreambaseAI/skills",
+  "license": "MIT",
+  "keywords": [
+    "dreambase",
+    "mcp",
+    "analytics",
+    "dashboards",
+    "data-visualization",
+    "reports"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Dreambase",
+    "shortDescription": "Plan, analyze, and present Dreambase data.",
+    "longDescription": "Use existing Dreambase datasets or plan validated new ones from connected Supabase, API, and MCP sources, connect missing data providers, inspect dashboards and health reports, and turn verified results into charts, reports, and presentations.",
+    "developerName": "Dreambase",
+    "category": "Data & Analytics",
+    "capabilities": ["Interactive", "Read", "Write"],
+    "websiteURL": "https://dreambase.com",
+    "privacyPolicyURL": "https://app.dreambase.com/privacy",
+    "termsOfServiceURL": "https://app.dreambase.com/terms",
+    "defaultPrompt": [
+      "Plan and build the datasets this analysis needs.",
+      "Connect a data source and analyze its key trends.",
+      "Review my dashboards and latest database health report."
+    ],
+    "brandColor": "#6954D9",
+    "composerIcon": "./assets/logo.png",
+    "logo": "./assets/logo.png"
+  }
+}

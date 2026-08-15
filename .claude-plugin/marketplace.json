@@ -1,0 +1,38 @@
+{
+  "name": "dreambase",
+  "owner": {
+    "name": "Dreambase",
+    "url": "https://github.com/DreambaseAI"
+  },
+  "metadata": {
+    "description": "The Dreambase MCP server plus the complete canonical Dreambase skill suite.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "dreambase",
+      "source": "./",
+      "description": "Connect to the Dreambase MCP server and use the complete canonical skill suite for product-data analytics, visualization, reports, presentations, visual design, and skill authoring.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Dreambase",
+        "url": "https://github.com/DreambaseAI"
+      },
+      "homepage": "https://app.dreambase.com",
+      "repository": "https://github.com/DreambaseAI/skills",
+      "license": "MIT",
+      "category": "data",
+      "keywords": [
+        "dreambase",
+        "mcp",
+        "analytics",
+        "dashboards",
+        "supabase",
+        "charts",
+        "echarts",
+        "data-visualization",
+        "reports"
+      ]
+    }
+  ]
+}

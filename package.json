@@ -1,0 +1,10 @@
+{
+  "name": "dreambase-skills-repo",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.15.9",
+  "scripts": {
+    "build:plugin": "node scripts/build-plugin.mjs --build",
+    "check:plugin": "node scripts/build-plugin.mjs && node scripts/validate-release.mjs"
+  }
+}

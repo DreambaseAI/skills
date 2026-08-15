@@ -1,0 +1,33 @@
+name: Build plugin submission artifact
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Validate root plugin
+        run: pnpm check:plugin
+      - name: Materialize standalone plugin
+        run: pnpm build:plugin
+      - name: Install ZIP tooling
+        run: sudo apt-get update && sudo apt-get install --yes zip
+      - name: Build symlink-free ZIP
+        working-directory: dist/dreambase
+        run: zip -q -r ../../dreambase-plugin.zip .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dreambase-plugin
+          path: dreambase-plugin.zip
+          if-no-files-found: error

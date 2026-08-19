@@ -7,8 +7,11 @@ querying it and turning the results into charts, reports, and decks.
 
 **Claude Code**
 
-```
+```text
+# One time: register this repository as the Dreambase plugin marketplace.
 /plugin marketplace add DreambaseAI/skills
+
+# Install the complete Dreambase plugin from that marketplace: all skills and the MCP server.
 /plugin install dreambase@dreambase
 ```
 
@@ -18,9 +21,14 @@ then install `dreambase`.
 **Codex** — point Codex at this repo's marketplace and install `dreambase`.
 
 ```bash
+# One time: register this repository as the Dreambase plugin marketplace.
 codex plugin marketplace add DreambaseAI/skills
+
+# Install the complete Dreambase plugin from that marketplace: all skills and the MCP server.
 codex plugin add dreambase@dreambase
 ```
+
+No separate skill or MCP installation is required when using the plugin.
 
 The plugin declares the MCP server as a remote `type: "http"` connection, so your
 host runs the OAuth sign-in itself the first time a Dreambase tool is called — no

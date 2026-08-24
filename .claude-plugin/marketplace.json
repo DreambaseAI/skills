@@ -5,20 +5,20 @@
     "url": "https://github.com/DreambaseAI"
   },
   "metadata": {
-    "description": "The Dreambase MCP server plus the complete canonical Dreambase skill suite.",
+    "description": "Create datasets for your agents and protect production data from queries.",
     "version": "1.0.0"
   },
   "plugins": [
     {
       "name": "dreambase",
       "source": "./",
-      "description": "Connect to the Dreambase MCP server and use the complete canonical skill suite for product-data analytics, visualization, reports, presentations, visual design, and skill authoring.",
+      "description": "Create datasets for your agents and protect production data from queries. With a single MCP your agents can build custom datasets blending together data from connected Supabase, API, and MCP sources, connect missing data providers, inspect dashboards and health reports, and turn verified results into charts, reports, and presentations.",
       "version": "1.0.0",
       "author": {
         "name": "Dreambase",
         "url": "https://github.com/DreambaseAI"
       },
-      "homepage": "https://app.dreambase.com",
+      "homepage": "https://dreambase.com",
       "repository": "https://github.com/DreambaseAI/skills",
       "license": "MIT",
       "category": "data",

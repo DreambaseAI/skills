@@ -2,7 +2,7 @@
   "name": "dreambase",
   "displayName": "Dreambase",
   "version": "1.0.0",
-  "description": "Connect, plan, query, and present data from Dreambase workspaces and their Supabase, API, and MCP sources.",
+  "description": "Create datasets for your agents and protect production data from queries with the Dreambase MCP and skills.",
   "author": {
     "name": "Dreambase",
     "url": "https://github.com/DreambaseAI"

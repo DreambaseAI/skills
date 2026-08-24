@@ -2,8 +2,8 @@
 
 const urls = [
   "https://dreambase.com",
-  "https://app.dreambase.com/privacy",
-  "https://app.dreambase.com/terms",
+  "https://dreambase.com/legal/privacy",
+  "https://dreambase.com/legal/terms",
   "https://dreambase.com/design.md",
 ];
 
@@ -19,7 +19,7 @@ for (const url of urls) {
     }
   } catch (error) {
     console.error(
-      `✗ ${url}: ${error instanceof Error ? error.message : String(error)}`,
+      `✗ ${url}: ${error instanceof Error ? error.message : String(error)}`
     );
     failed = true;
   }
@@ -37,13 +37,13 @@ try {
     typeof issuer !== "string"
   ) {
     throw new Error(
-      "protected-resource metadata is incomplete or inconsistent",
+      "protected-resource metadata is incomplete or inconsistent"
     );
   }
   console.log("✓ MCP protected-resource metadata is consistent");
 
   const authorizationMetadata = await fetch(
-    `${issuer.replace(/\/$/, "")}/.well-known/oauth-authorization-server`,
+    `${issuer.replace(/\/$/, "")}/.well-known/oauth-authorization-server`
   );
   const authorization = await authorizationMetadata.json();
   if (
@@ -53,15 +53,17 @@ try {
     !authorization.grant_types_supported?.includes("authorization_code")
   ) {
     throw new Error(
-      "authorization-server metadata is missing OAuth requirements",
+      "authorization-server metadata is missing OAuth requirements"
     );
   }
   console.log(
-    "✓ OAuth authorization metadata advertises S256 and registration",
+    "✓ OAuth authorization metadata advertises S256 and registration"
   );
 } catch (error) {
   console.error(
-    `✗ MCP/OAuth metadata: ${error instanceof Error ? error.message : String(error)}`,
+    `✗ MCP/OAuth metadata: ${
+      error instanceof Error ? error.message : String(error)
+    }`
   );
   failed = true;
 }
@@ -84,7 +86,9 @@ try {
   const challenge = response.headers.get("www-authenticate") ?? "";
   if (response.status !== 401 || !challenge.includes("resource_metadata=")) {
     console.error(
-      `✗ MCP OAuth challenge: HTTP ${response.status}, ${challenge || "missing header"}`,
+      `✗ MCP OAuth challenge: HTTP ${response.status}, ${
+        challenge || "missing header"
+      }`
     );
     failed = true;
   } else {
@@ -92,7 +96,9 @@ try {
   }
 } catch (error) {
   console.error(
-    `✗ MCP OAuth challenge: ${error instanceof Error ? error.message : String(error)}`,
+    `✗ MCP OAuth challenge: ${
+      error instanceof Error ? error.message : String(error)
+    }`
   );
   failed = true;
 }

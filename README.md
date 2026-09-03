@@ -47,7 +47,7 @@ consent.
 |---|---|
 | Identity | `whoami`, `list_workspaces` |
 | Dashboards | `list_dashboards` |
-| Datasets | `list_datasets`, `get_dataset`, `query_dataset`, `plan_datasets`, `save_dataset` |
+| Datasets | `list_datasets`, `get_dataset`, `query_dataset`, `plan_datasets`, `save_dataset`, `refresh_dataset`, `promote_dataset`, `manage_dataset_schedule` |
 | Metric snapshots | `list_aggregates`, `get_aggregate` |
 | Connections | `list_connections`, `get_connection`, `search_connection` |
 | Connector setup | `list_connectors`, `request_connector_connection`, `get_connection_request` |

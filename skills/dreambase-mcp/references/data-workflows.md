@@ -21,8 +21,12 @@ dataset when those statistics are necessary.
   and use `plan_datasets`.
 - `queryable: false`: it is a legacy format that becomes queryable after its
   dashboard refreshes. Do not retry.
-- `expiresAt: null`: durable dashboard-owned dataset. Read it freely, but never
-  target it with `save_dataset`.
+- `expiresAt: null`: durable — either a dashboard's own dataset or one someone
+  promoted. Read it freely, but never target it with `save_dataset`.
+- A `refresh` block means the dataset refreshes itself on a schedule. It carries
+  the state (`scheduled`, `running`, `error`, `paused`), the cadence, the next
+  run, the last successful refresh, and the last failure. No `refresh` block
+  means no schedule.
 
 ## Discover schemas
 
@@ -93,6 +97,96 @@ retry. If a validated plan fails:
 - Connection `NOT_FOUND`: inspect `get_connection`.
 - `INTERNAL_ERROR`: list datasets first; never automatically replay API or MCP
   sources.
+
+## Refresh an existing dataset
+
+Use `refresh_dataset` when the user wants fresher rows from an existing dataset
+without changing its saved definition. It works for scratch and durable
+datasets, preserves their retention and schedule, and returns the refreshed
+handle. Use `save_dataset` only when the source definition itself must change.
+
+Use MCP `refresh_dataset` during exploratory agent work. For a repeated,
+fixed integration, prefer
+`POST /api/v1/workspaces/{workspace_id}/datasets/{dataset_id}/refresh` with a
+Bearer token carrying `datasets:read` and `datasets:write`. The two surfaces
+share the same implementation and return the same handle.
+
+A refresh executes the real source and incurs source/compute usage. API POST
+and MCP sources may have effects on the connected system, so require an
+explicit refresh request. After success, inspect the handle and run the
+targeted `query_dataset` checks the user's claims need. If the call times out or
+fails ambiguously, do not blind-retry: the source may already have run even if
+the result did not reach the client.
+
+## Keep it: durable datasets and schedules
+
+A saved dataset is scratch — it expires in about seven days. `promote_dataset`
+clears that expiry. `manage_dataset_schedule` (`set`, `pause`, `resume`,
+`remove`) manages recurring refresh after a standalone dataset is durable.
+Promotion and scheduling are separate calls: promote first, then set the
+schedule.
+
+Promotion starts durable-storage usage. The schedule actions `set` and `resume`
+start or restart recurring source and compute usage. A schedule re-executes the
+dataset's saved source on every run — for an API POST or an MCP tool source that
+is an external action on a connected system, not a read. The user must make
+that decision from the evidence in a separate reply. Follow this order even
+when the opening request already said "keep this" or "refresh it weekly":
+
+1. **Build or refresh the scratch data first.** Nothing is promoted before it
+   exists and has been looked at.
+2. **Inspect what was actually stored.** Read the saved preview and the handle's
+   profile statistics, then run targeted `query_dataset` checks against the
+   claims that matter: row count, the grain or key you expect (does a
+   `GROUP BY` on the supposed key return one row each?), the date range the data
+   actually covers, and the headline totals or filtered figures the user asked
+   about.
+3. **Report the evidence.** Name the dataset and its id, its row count and
+   columns, the grain/key checks you ran, the date coverage, the important
+   totals, and the limitations — truncation, an assumption the planner made that
+   is still unresolved, a window that is shorter than requested. Say only that
+   the result matches the stated intent _based on these checks_. Never claim it
+   is correct in general; you checked what you checked.
+4. **Present the exact action and what it costs.** Name the tool and arguments
+   you would call and that promotion starts durable-storage usage. If the user
+   also wants a schedule, present the separate `manage_dataset_schedule` call,
+   its cadence and next run time in the user's timezone, and the recurring
+   source and compute usage. When the source is an API POST or an MCP tool call,
+   say plainly that re-invoking it may have effects on the connected system.
+5. **Stop and wait for a separate affirmative reply.** End the turn. Do not call
+   the tool in the same turn as the report, whatever the original request said.
+6. **Call only what the user confirmed.** Confirm from the promotion result
+   that `expiresAt` is `null`. If the user confirmed both promotion and
+   scheduling, call `promote_dataset` first and then
+   `manage_dataset_schedule` with `action: "set"`; confirm the `refresh` block
+   shows the cadence and next run described.
+
+For `manage_dataset_schedule`:
+
+- Before `set` or `resume`, inspect the current durable handle and run targeted
+  `query_dataset` checks against the claims that matter. Report that evidence,
+  the exact action/cadence/next run, recurring source and compute usage, and any
+  API POST or MCP-tool side-effect risk; then stop for a separate affirmative
+  reply.
+- A clear request to `pause` or `remove` may execute immediately because it
+  stops future usage. `pause` retains the cadence; `remove` deletes only the
+  schedule. Neither changes the durable dataset or its rows. Ask which one only
+  when the user's intended lifecycle is genuinely ambiguous.
+
+Reading the results:
+
+- Repeating the same promotion succeeds and changes nothing.
+- Repeating the same enabled schedule also succeeds and changes nothing;
+  `action: "set"` with a different cadence replaces the existing cadence.
+- A dashboard-owned dataset is rejected by both tools. Its dashboard already
+  owns its refresh; say so instead of looking for a way around it.
+- `pause` keeps the cadence and stops the runs; `remove` deletes the schedule
+  and leaves the durable dataset and its rows untouched. They are not
+  interchangeable — clarify only when the request does not already distinguish
+  temporary stopping from removal.
+- `state: "paused"` with a non-zero `consecutiveFailures` and a `lastError` is
+  the circuit breaker: three consecutive failures pause a schedule on its own.
+  Report the error, and use `resume` only once the cause is addressed.
 
 ## Query
 

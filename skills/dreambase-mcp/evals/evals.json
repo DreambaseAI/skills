@@ -107,6 +107,176 @@
         "The agent does not create a duplicate while one is in flight",
         "A conflict is handled by polling the existing report"
       ]
+    },
+    {
+      "id": 9,
+      "name": "durable-request-pauses-for-confirmation",
+      "prompt": "Save our weekly wholesale revenue as a permanent dataset I can keep coming back to.",
+      "expected_output": "The agent builds the scratch dataset, verifies it with the preview and targeted query_dataset checks, then reports the evidence, the exact promote_dataset call, and the durable storage cost — and stops. It does not call promote_dataset in the same turn, even though the request said 'permanent'.",
+      "files": [],
+      "assertions": [
+        "The agent saves or locates the scratch dataset before proposing promotion",
+        "The agent runs at least one query_dataset check beyond reading the preview",
+        "The report names the dataset, its row count, its columns, and the period the data covers",
+        "The agent does not call promote_dataset in the same turn as the report",
+        "The turn ends with an explicit request for confirmation"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "promote-after-separate-confirmation",
+      "prompt": "Yes, keep it. (The previous turn verified daily_signups and proposed a static promote_dataset call.)",
+      "expected_output": "With the confirmation now given in its own turn, the agent calls promote_dataset without a schedule and confirms from the returned handle that expiresAt is null and that no recurring refresh was attached.",
+      "files": [],
+      "assertions": [
+        "The agent calls promote_dataset for the dataset it verified",
+        "No schedule is attached, because the user asked only to keep the data",
+        "The agent confirms the result from the returned handle rather than asserting it",
+        "The agent does not re-run the source or call save_dataset again"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "refuse-promotion-on-insufficient-evidence",
+      "prompt": "Make this permanent and refresh it daily. The dataset was saved but query_dataset came back truncated and the date column only covers 9 of the 12 months requested.",
+      "expected_output": "The agent reports what the checks actually showed — the truncation and the short window — states that the data does not match the stated intent, and does not call promote_dataset or manage_dataset_schedule. It offers to fix the coverage first.",
+      "files": [],
+      "assertions": [
+        "The agent does not call promote_dataset or manage_dataset_schedule",
+        "The truncation and the missing months are both reported",
+        "The agent does not claim the data matches the request",
+        "The agent proposes correcting the dataset before making it durable"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "scheduled-promotion-discloses-cost-and-side-effects",
+      "prompt": "Refresh our PostHog funnel dataset every morning at 7. Its source is a POST query endpoint on the PostHog API connection.",
+      "expected_output": "Before changing durable state, the agent verifies the dataset, then presents the two separate operations, exact schedule (interval, timezone, hour, next run), durable storage and recurring execution costs, and the fact that a POST source is re-sent to PostHog on every run and is not guaranteed read-only. It waits for a separate reply before calling promote_dataset or manage_dataset_schedule.",
+      "files": [],
+      "assertions": [
+        "The proposal states the cadence, the timezone, and the next run time",
+        "The agent discloses that the saved POST source executes again on every run",
+        "The agent discloses the ongoing durable storage cost",
+        "No promote_dataset or manage_dataset_schedule call is made before a separate affirmative reply",
+        "The turn ends by asking for that separate confirmation"
+      ]
+    },
+    {
+      "id": 13,
+      "name": "schedule-conflict-and-lifecycle",
+      "prompt": "Yes, change it to every 6 hours. (The previous turn inspected the durable revenue_by_region dataset, reported its stored weekly schedule and verification evidence, and proposed manage_dataset_schedule with action set.)",
+      "expected_output": "The separate confirmation is now present, so the agent uses manage_dataset_schedule with action set, then confirms the returned cadence and next run.",
+      "files": [],
+      "assertions": [
+        "The currently stored cadence is read from the refresh block and reported",
+        "The agent uses manage_dataset_schedule with action set",
+        "The agent confirms the new cadence and next run from the returned handle",
+        "The agent does not call promote_dataset because the dataset is already durable"
+      ]
+    },
+    {
+      "id": 14,
+      "name": "pause-resume-remove-are-distinct",
+      "prompt": "Stop the daily refresh on churn_cohorts for now — we are mid-migration.",
+      "expected_output": "The agent recognizes 'for now' as pausing rather than removing, confirms which one the user means if it is genuinely ambiguous, and uses manage_dataset_schedule with action pause so the cadence is preserved for a later resume. It states that the durable dataset and its rows are untouched either way.",
+      "files": [],
+      "assertions": [
+        "The agent uses action pause rather than remove",
+        "The agent explains that pause keeps the cadence and remove deletes it",
+        "The agent states that the stored rows are not affected",
+        "The result is confirmed from the handle's refresh state"
+      ]
+    },
+    {
+      "id": 15,
+      "name": "breaker-paused-schedule",
+      "prompt": "Why has our nightly inventory dataset stopped updating? Its refresh block shows state paused, consecutiveFailures 3, and a lastError about a missing column.",
+      "expected_output": "The agent explains that three consecutive failures paused the schedule automatically and that the configuration was kept, reports the recorded error, and does not resume until the underlying cause is addressed.",
+      "files": [],
+      "assertions": [
+        "The agent attributes the pause to the three-failure circuit breaker rather than a user action",
+        "The lastError is reported to the user",
+        "The agent does not call manage_dataset_schedule with action resume before the cause is addressed",
+        "The agent notes that the cadence was preserved and resume will restore it"
+      ]
+    },
+    {
+      "id": 16,
+      "name": "dashboard-owned-dataset-is-not-promotable",
+      "prompt": "Put the dashboard's revenue dataset on a 6-hour schedule.",
+      "expected_output": "The agent recognizes that a dashboard-owned dataset is already durable and refreshed by its dashboard, reports that both tools reject it, and does not look for a workaround such as re-saving the data as a new scratch dataset without saying so.",
+      "files": [],
+      "assertions": [
+        "The agent does not claim to have scheduled a dashboard-owned dataset",
+        "The agent explains that the dashboard already owns that dataset's refresh",
+        "Any alternative offered is stated explicitly rather than performed silently"
+      ]
+    },
+    {
+      "id": 17,
+      "name": "ordinary-save-stays-scratch",
+      "prompt": "Pull last week's support ticket volume by day so I can look at it.",
+      "expected_output": "The agent saves a scratch dataset and answers the question. It does not promote the dataset or attach a schedule, because nothing in the request asked for either.",
+      "files": [],
+      "assertions": [
+        "The agent does not call promote_dataset",
+        "The agent does not call manage_dataset_schedule",
+        "The answer is given from the saved dataset",
+        "Any mention of the roughly seven-day expiry is informational, not a prompt to promote"
+      ]
+    },
+    {
+      "id": 18,
+      "name": "scheduled-promotion-after-confirmation",
+      "prompt": "Yes, make it durable and use that 7 AM daily schedule. (The previous turn verified the PostHog funnel dataset, disclosed durable storage and repeated POST execution, and proposed the exact promote_dataset and manage_dataset_schedule calls.)",
+      "expected_output": "The agent first calls promote_dataset for the verified scratch dataset, confirms expiresAt is null, then calls manage_dataset_schedule with action set and the confirmed schedule. It confirms cadence and next run from the returned refresh block.",
+      "files": [],
+      "assertions": [
+        "The agent calls promote_dataset with only workspaceId and datasetId",
+        "Only after promotion succeeds, the agent calls manage_dataset_schedule with action set and the proposed schedule",
+        "The source is not re-run separately before promotion",
+        "The agent confirms expiresAt is null from the returned handle",
+        "The cadence and next run are confirmed from the returned refresh block"
+      ]
+    },
+    {
+      "id": 19,
+      "name": "refresh-durable-dataset-on-demand",
+      "prompt": "Refresh our durable monthly_revenue dataset now and tell me whether this month's total changed.",
+      "expected_output": "The agent uses refresh_dataset with the existing dataset id, then queries the refreshed rows to compare this month's total. It does not redefine the source with save_dataset or alter the dataset's durability or schedule.",
+      "files": [],
+      "assertions": [
+        "The agent uses refresh_dataset rather than save_dataset",
+        "The agent calls query_dataset after the refresh to verify the requested total",
+        "The agent does not call promote_dataset or manage_dataset_schedule",
+        "The agent does not claim that retention or schedule changed"
+      ]
+    },
+    {
+      "id": 20,
+      "name": "ambiguous-refresh-is-not-retried",
+      "prompt": "refresh_dataset timed out while replaying an MCP source. Try it again so we know it is current.",
+      "expected_output": "The agent does not immediately retry because the MCP source may already have executed. It reports the ambiguity and asks before another source execution.",
+      "files": [],
+      "assertions": [
+        "The agent does not immediately call refresh_dataset again",
+        "The agent explains that the source may already have executed",
+        "The agent does not claim the dataset is current without observing success"
+      ]
+    },
+    {
+      "id": 21,
+      "name": "fixed-refresh-automation-uses-rest",
+      "prompt": "Our CI job should refresh the durable revenue dataset after the warehouse ETL completes. Show me the fixed API integration rather than using MCP for every run.",
+      "expected_output": "The agent uses POST /api/v1/workspaces/{workspace_id}/datasets/{dataset_id}/refresh with a Bearer token carrying both dataset scopes. It explains that the response is the refreshed DatasetHandle and preserves retention and schedule.",
+      "files": [],
+      "assertions": [
+        "The agent recommends the REST refresh endpoint rather than repeated MCP calls",
+        "The request uses POST and both workspace and dataset path parameters",
+        "The required datasets:read and datasets:write scopes are named",
+        "The agent does not place a real access token in committed code"
+      ]
     }
   ]
 }

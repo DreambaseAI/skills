@@ -30,19 +30,22 @@ because it returns full technical context and connected sources.
 
 ## Route by intent
 
-| Need | Route |
-|---|---|
-| Inventory | `list_dashboards`, `list_datasets`, `list_connections`, `list_skills` |
-| Answer from an existing dataset | `list_datasets` → `query_dataset` |
-| Create data for a new question | connection discovery → `plan_datasets` → authorized `save_dataset` → inspect preview / `query_dataset` |
-| Inspect source schemas | `list_connections` → `get_connection` → `search_connection` |
-| Connect a missing source | `list_connectors` → authorized `request_connector_connection` → `get_connection_request` |
-| Read weekly metric narratives | `list_aggregates` → `get_aggregate` |
-| Review database health | `list_health_reports` / `get_health_report`; create and poll only when a fresh audit was requested |
-| Use business-domain context | `list_skills` → `get_skill` before rediscovering relationships |
+| Need                                                           | Route                                                                                                                               |
+| -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Inventory                                                      | `list_dashboards`, `list_datasets`, `list_connections`, `list_skills`                                                               |
+| Answer from an existing dataset                                | `list_datasets` → `query_dataset`                                                                                                   |
+| Create data for a new question                                 | connection discovery → `plan_datasets` → authorized `save_dataset` → inspect preview / `query_dataset`                              |
+| Keep a dataset permanently, or start/restart scheduled refresh | verify the data → report the evidence and exact action → separate user confirmation → `promote_dataset` / `manage_dataset_schedule` |
+| Stop scheduled refresh                                         | explicit request → `manage_dataset_schedule` with `pause` or `remove`                                                               |
+| Inspect source schemas                                         | `list_connections` → `get_connection` → `search_connection`                                                                         |
+| Connect a missing source                                       | `list_connectors` → authorized `request_connector_connection` → `get_connection_request`                                            |
+| Read weekly metric narratives                                  | `list_aggregates` → `get_aggregate`                                                                                                 |
+| Review database health                                         | `list_health_reports` / `get_health_report`; create and poll only when a fresh audit was requested                                  |
+| Use business-domain context                                    | `list_skills` → `get_skill` before rediscovering relationships                                                                      |
 
-For any new data need, read [data-workflows.md](references/data-workflows.md)
-before acting. For source connection setup, read
+For any new data need, and before making any dataset durable or scheduled, read
+[data-workflows.md](references/data-workflows.md) before acting. For source
+connection setup, read
 [connectors.md](references/connectors.md). For health reports, workspace Skills,
 permissions, or failures, read [operations.md](references/operations.md).
 
@@ -60,6 +63,15 @@ permissions, or failures, read [operations.md](references/operations.md).
 - Call `save_dataset`, `create_health_report`, `create_skill`, `update_skill`,
   or `request_connector_connection` only when the user clearly requested the
   corresponding change. Otherwise summarize the proposed action and ask.
+- `promote_dataset`, and `manage_dataset_schedule` actions `set` / `resume`,
+  need more than a prior request. They start or restart ongoing storage/source
+  usage, and a schedule re-executes the saved source unattended — which for an
+  API POST or an MCP tool source is an external action, not a read. Verify the
+  data, present the evidence and exact action, and stop for a separate
+  affirmative reply before calling them, even when the opening request already
+  said "keep this" or "every week". An explicit `pause` or `remove` request may
+  execute immediately because it stops future usage. The workflow is in
+  [data-workflows.md](references/data-workflows.md).
 - Never blind-retry an ambiguous write. First use the appropriate list/get tool
   to determine whether it succeeded.
 - A planner clarification may include completed plans. Save them only when the

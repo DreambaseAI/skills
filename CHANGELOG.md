@@ -22,6 +22,13 @@ recorded here. Format loosely follows
   reference files keep the top-level routing guidance compact.
 - **`SETUP.md`** — walks a user through account creation,
   connecting a Supabase project, OAuth consent, and verification.
+- **Durable-dataset lifecycle in `dreambase-mcp`** — `refresh_dataset` and
+  `promote_dataset`, the promotion consent gate (verify, present the
+  durable-storage cost and that promotion cannot currently be undone, then wait
+  for a separate affirmative reply), and a new
+  `references/dataset-lifecycle.md` covering retention, refresh-versus-redefine,
+  `CONFLICT` recovery, and the fact that a dataset handle exposes no
+  last-refreshed time.
 
 ### Changed
 
@@ -41,3 +48,19 @@ recorded here. Format loosely follows
   explicit opt-in.
 - **Release hygiene** adds CI, a protected baseline for all pre-release skills,
   third-party provenance, source-text NUL checks, and store submission gates.
+- **Corrected the durability rule.** The skill previously told agents that an
+  `expiresAt: null` dataset was dashboard-owned and must never be targeted with
+  `save_dataset`. Durable also covers promoted datasets, and the guard on
+  redefinition is dashboard linkage, not durability — a standalone promoted
+  dataset is redefinable and the write preserves its durability.
+- **Replaced an unsatisfiable connector test.** Both the eval and the OpenAI
+  submission collateral asked the agent to connect Stripe, which has no
+  agent-issuable connect link, so a correct agent could not pass. They now
+  target GitHub; the `connectLinkAvailable: false` branch is documented in
+  `references/connectors.md` instead.
+- **Refreshed the rest of the MCP contract** — `get_dataset` routing,
+  `list_connections` across `supabase | api | mcp`, the `[EXPERIMENTAL]`
+  description prefix, `query_dataset` self-joins and its 500-row/16 KiB cap,
+  `list_datasets` cursor paging, rejection of `connectionIds: []`, the
+  unscanned-connection guard on saves, honest health-report reporting, and
+  `update_skill` needing only `skills:write`.

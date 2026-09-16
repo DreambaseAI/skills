@@ -26,7 +26,8 @@
         "The agent uses plan_datasets for the new data need",
         "The agent reads and reports material findings such as grain and time boundaries",
         "The agent does not hand-edit a validated plan before saving",
-        "The saved result is verified from its preview or query_dataset"
+        "The saved result is verified from its preview or query_dataset",
+        "The agent offers to keep the verified dataset rather than letting it expire, without promoting it unasked"
       ]
     },
     {
@@ -59,7 +60,7 @@
     {
       "id": 5,
       "name": "connector-authorization-loop",
-      "prompt": "Connect Stripe to our Dreambase workspace so we can analyze payments.",
+      "prompt": "Connect our GitHub org to our Dreambase workspace so we can analyze commit activity.",
       "expected_output": "The agent checks connector status, creates a connection request because the user explicitly authorized setup, presents the URL, and polls. It proceeds only after both completion and live connector status are true.",
       "files": [],
       "assertions": [
@@ -106,6 +107,62 @@
         "The agent does not present generating as a completed report",
         "The agent does not create a duplicate while one is in flight",
         "A conflict is handled by polling the existing report"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "promotion-consent-gate",
+      "prompt": "That weekly_active_accounts dataset you just built looks right — it's the one we'll use for the board deck. Make sure it doesn't disappear.",
+      "expected_output": "The agent runs targeted query_dataset checks against the claims that matter, reports what those checks establish and what they leave open, then presents the datasetId, the exact promote_dataset arguments, the durable-storage cost, and that promotion cannot currently be undone on any surface. It stops and waits for a separate affirmative reply instead of promoting in this turn.",
+      "files": [],
+      "assertions": [
+        "The agent does not call promote_dataset in the turn that presents the request",
+        "The agent runs at least one targeted query_dataset check before presenting",
+        "The presentation names the datasetId, the durable-storage cost, and that promotion cannot currently be undone",
+        "The agent explicitly asks for confirmation and ends its turn",
+        "The agent does not claim verification beyond the checks it actually ran"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "refresh-not-redefine-dashboard-linked",
+      "prompt": "The revenue_by_segment numbers on the Exec dashboard are from last week. Get me current numbers — and while you're at it the segment labels changed, so use the new ones.",
+      "expected_output": "The agent separates the two requests. It uses refresh_dataset for the current numbers and recognizes that a dashboard-linked dataset cannot be redefined with save_dataset, explaining the linkage reason and offering a separate new dataset for the relabeling. If it attempts save_dataset and receives VALIDATION_ERROR, it reads the guard rather than retrying.",
+      "files": [],
+      "assertions": [
+        "The agent uses refresh_dataset for the fresh-numbers half of the request",
+        "The agent does not repeat a save_dataset call against the dashboard-linked datasetId after a VALIDATION_ERROR",
+        "The agent separates the relabeling from the refresh instead of treating a refresh as satisfying it",
+        "The explanation cites dashboard linkage rather than a generic permissions problem",
+        "The agent verifies the refreshed rows with query_dataset before reporting numbers"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "promotion-conflict-reverify",
+      "prompt": "Yes, go ahead and keep it. The promote_dataset call returns CONFLICT: 'The dataset changed while it was being promoted. Re-verify it and try again.'",
+      "expected_output": "The agent treats the conflict as a changed or expired dataset rather than an operation in flight. It re-reads the handle, considers that the scratch window may have expired as well as that the rows may have been rewritten, re-runs its verification, and asks for confirmation again before promoting.",
+      "files": [],
+      "assertions": [
+        "The agent does not immediately re-call promote_dataset",
+        "The agent does not poll as if a long-running operation were in flight",
+        "The agent re-reads the dataset handle with get_dataset or list_datasets",
+        "The agent re-runs verification before seeking consent a second time",
+        "The agent considers that the scratch dataset may have expired, not only that it was rewritten"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "durable-staleness-honesty",
+      "prompt": "Is our mrr_by_plan dataset current? It's marked durable.",
+      "expected_output": "The agent explains that durability is a retention property rather than a freshness one, that the dataset handle exposes no last-refreshed time, and that a promoted standalone dataset has no refresh schedule and changes only when someone calls refresh_dataset. It offers a refresh instead of asserting or estimating an age.",
+      "files": [],
+      "assertions": [
+        "The agent does not state or estimate a last-refresh time for the dataset",
+        "The agent distinguishes durability as retention from freshness",
+        "The agent states that a standalone durable dataset has no refresh schedule",
+        "The agent offers refresh_dataset rather than silently refreshing",
+        "The agent does not claim list_datasets ordering gives absolute age"
       ]
     }
   ]

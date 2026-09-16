@@ -47,7 +47,7 @@ consent.
 |---|---|
 | Identity | `whoami`, `list_workspaces` |
 | Dashboards | `list_dashboards` |
-| Datasets | `list_datasets`, `get_dataset`, `query_dataset`, `plan_datasets`, `save_dataset` |
+| Datasets | `list_datasets`, `get_dataset`, `query_dataset`, `plan_datasets`, `save_dataset`, `refresh_dataset`, `promote_dataset` |
 | Metric snapshots | `list_aggregates`, `get_aggregate` |
 | Connections | `list_connections`, `get_connection`, `search_connection` |
 | Connector setup | `list_connectors`, `request_connector_connection`, `get_connection_request` |
@@ -55,7 +55,10 @@ consent.
 | Workspace Skills | `list_skills`, `get_skill`, `create_skill`, `update_skill` |
 
 `query_dataset` runs a sandboxed read-only DuckDB `SELECT` over one dataset, so
-an agent can compute an answer instead of paging through rows. Access is gated by
+an agent can compute an answer instead of paging through rows. Datasets start as
+scratch snapshots that expire in about a week; once you've verified one,
+`promote_dataset` keeps it permanently, and `refresh_dataset` replays its saved
+definition for current rows. Access is gated by
 OAuth scopes *and* your workspace membership: the tool list you see is exactly
 what your grant allows. The `dreambase-mcp` skill teaches an agent how to drive
 all of it correctly.
@@ -68,7 +71,7 @@ installation.
 
 | Skill | What it does |
 |---|---|
-| [`dreambase-mcp`](skills/dreambase-mcp/) | The usage contract for the Dreambase MCP server — call order, the `query_dataset` DuckDB dialect and its result caps, connection discovery, async health-report polling, retry rules for non-idempotent writes, and what each error code means |
+| [`dreambase-mcp`](skills/dreambase-mcp/) | The usage contract for the Dreambase MCP server — call order, the `query_dataset` DuckDB dialect and its result caps, connection discovery, async health-report polling, retry rules for non-idempotent writes, the durable-dataset lifecycle (save → verify → promote) and its consent gate, and what each error code means |
 | [`dreambase-echarts`](skills/dreambase-echarts/) | Author Apache ECharts option JSON for the Dreambase renderer — includes an offline option-schema lookup CLI and a structural config validator |
 | [`dreambase-visualization-design`](skills/dreambase-visualization-design/) | Design, critique, and improve charts, dashboards, and infographics using evidence-based visualization, perceptual, accessibility, and integrity principles |
 | [`dreambase-data-stories`](skills/dreambase-data-stories/) | Design reports, executive summaries, slide decks, infographics, and scrollytelling pieces that blend charts, illustration, typography, and narrative — built on the practices of FT, NYT Graphics, The Pudding, and Reuters |

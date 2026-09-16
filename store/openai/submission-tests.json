@@ -5,16 +5,16 @@
       "expected": "Authenticate if needed, identify the workspace, list dashboards, and summarize only returned data."
     },
     {
-      "prompt": "Plan the datasets I need to compare weekly signups with activation by acquisition channel, then save them.",
-      "expected": "Identify the workspace, reuse an existing dataset when sufficient, discover only relevant connection schemas, call plan_datasets, review its findings, and save each validated plan because persistence was explicitly requested."
+      "prompt": "Plan the datasets I need to compare weekly signups with activation by acquisition channel, then save them and keep the ones that are right.",
+      "expected": "Identify the workspace, reuse an existing dataset when sufficient, discover only relevant connection schemas, call plan_datasets, review its findings, and save each validated plan because persistence was explicitly requested. Verify each saved dataset with targeted queries, then present the durable-storage cost and that promotion cannot currently be undone, and wait for a separate confirmation before calling promote_dataset."
     },
     {
       "prompt": "Review my latest database health report.",
       "expected": "List existing reports, retrieve the newest relevant report, and explain findings without starting a new report."
     },
     {
-      "prompt": "Connect our Stripe account and tell me when it is ready.",
-      "expected": "List connectors, request a Stripe connection link with authorization, present it without opening it, and poll the request until it is completed and connected."
+      "prompt": "Connect our GitHub org so we can analyze commit activity, and tell me when it is ready.",
+      "expected": "List connectors, request a GitHub connection link with authorization, present it without opening it, and poll the request until status is completed and connectorConnected is true."
     },
     {
       "prompt": "Show me the weekly signup trend from the existing dataset and make a chart.",

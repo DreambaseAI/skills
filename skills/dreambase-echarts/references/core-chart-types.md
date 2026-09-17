@@ -47,7 +47,7 @@ Key options: `radius` (two values = donut), `roseType`, `avoidLabelOverlap`,
   "series": [{ "type": "scatter", "data": [[10.0,8.04],[8.0,6.95],[13.0,7.58]] }]
 }
 ```
-Key options: `symbolSize` (a function string for bubble charts), `itemStyle.color`.
+Key options: `symbolSize` (a number, or per-point sizes already computed in each data item), `itemStyle.color`.
 
 ## heatmap — 2D matrix intensity
 ```json

@@ -41,13 +41,11 @@ Multi-axis: pass an **array** of two axis objects. Series picks one via `yAxisIn
 ```json
 { "trigger": "axis" | "item",
   "axisPointer": { "type": "cross" | "shadow" | "line" },
-  "formatter": "{b}: {c}",
-  "valueFormatter": "(v) => v.toFixed(2)" }
+  "formatter": "{b}: {c}" }
 ```
 For multi-series, prefer `trigger: 'axis'`. For pie/scatter, `trigger: 'item'`.
-`formatter` accepts template strings (`{a}` series, `{b}` name, `{c}` value,
-`{d}` percent) or a JS function string; the renderer must eval function strings
-under its safety policy, so prefer templates or `valueFormatter`.
+`formatter` is a template string only (`{a}` series, `{b}` name, `{c}` value,
+`{d}` percent). Do not emit function source.
 
 ## legend
 ```json

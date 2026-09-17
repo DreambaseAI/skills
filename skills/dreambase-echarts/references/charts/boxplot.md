@@ -38,7 +38,7 @@
       "boxWidth": [7, 40],
       "itemStyle": { "color": "#c8dcf5", "borderColor": "#4477aa", "borderWidth": 1.5 },
       "tooltip": {
-        "formatter": "{b}<br/>min: {@[1]}<br/>Q1: {@[2]}<br/>median: {@[3]}<br/>Q3: {@[4]}<br/>max: {@[5]}"
+        "formatter": "{b} min {@[1]} / Q1 {@[2]} / median {@[3]} / Q3 {@[4]} / max {@[5]}"
       },
       "data": [
         [118, 142, 165, 190, 236],

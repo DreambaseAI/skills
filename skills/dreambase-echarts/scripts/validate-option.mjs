@@ -12,18 +12,44 @@
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { gunzipSync } from "node:zlib";
 
-const INDEX_PATH = resolve(dirname(fileURLToPath(import.meta.url)), "../assets/option-index.json");
-const { root } = JSON.parse(readFileSync(INDEX_PATH, "utf8"));
+const INDEX_PATH = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  "../assets/option-index.json.gz",
+);
+const { root } = JSON.parse(gunzipSync(readFileSync(INDEX_PATH)).toString("utf8"));
 const KNOWN_TOP = new Set(root.map((n) => n.p).concat(["baseOption", "media"]));
 const seriesNode = root.find((n) => n.p === "series");
 const KNOWN_SERIES_TYPES = new Set(seriesNode.c.map((n) => n.p));
 const SERIES_PROPS = new Map(seriesNode.c.map((n) => [n.p, new Set((n.c ?? []).map((c) => c.p))]));
 
 const MAX_INLINE_POINTS = 200;
+const CALLBACK_KEYS = new Set(["formatter", "valueFormatter", "symbolSize", "renderItem"]);
 const errors = [];
 const warnings = [];
 const arr = (v) => (v === undefined ? [] : Array.isArray(v) ? v : [v]);
+
+function looksLikeScript(value) {
+  if (typeof value !== "string") return false;
+  const trimmed = value.trim();
+  return /^(async\s+)?function\b/.test(trimmed) || trimmed.includes("=>");
+}
+
+function rejectScripts(node, ctx) {
+  if (Array.isArray(node)) {
+    node.forEach((item, i) => rejectScripts(item, `${ctx}[${i}]`));
+    return;
+  }
+  if (!node || typeof node !== "object") return;
+  for (const [key, value] of Object.entries(node)) {
+    const path = ctx ? `${ctx}.${key}` : key;
+    if (CALLBACK_KEYS.has(key) && looksLikeScript(value)) {
+      errors.push(`${path}: use an ECharts template string (e.g. "{b}: {c}") or a number, not a script`);
+    }
+    rejectScripts(value, path);
+  }
+}
 
 function validateOption(opt, ctx = "") {
   const at = (p) => (ctx ? `${ctx}.${p}` : p);
@@ -43,6 +69,7 @@ function validateOption(opt, ctx = "") {
     if (!s || typeof s !== "object") return errors.push(`${sat}: not an object`);
 
     if (!s.type) errors.push(`${sat}: missing "type"`);
+    else if (s.type === "custom") errors.push(`${sat}: custom series are not supported — use a built-in type, pictorialBar, or graphic`);
     else if (!KNOWN_SERIES_TYPES.has(s.type)) errors.push(`${sat}: unknown series type '${s.type}' (valid: ${[...KNOWN_SERIES_TYPES].join(", ")})`);
 
     const known = SERIES_PROPS.get(s.type);
@@ -120,6 +147,7 @@ if (opt.baseOption) {
 } else {
   validateOption(opt);
 }
+rejectScripts(opt, "");
 
 for (const e of errors) console.log(`error:   ${e}`);
 for (const w of warnings) console.log(`warning: ${w}`);

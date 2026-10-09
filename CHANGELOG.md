@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased — plugin repository split
+
+- Move `dreambase-mcp`, MCP wiring, plugin manifests, and release tooling to
+  `DreambaseAI/plugin` for the slim 2.0.0 plugin.
+- Preserve all eight optional library skills and their evaluations and licenses.
+- Retain Claude and Codex marketplace redirects; document Cursor reinstallation.
+- Replace plugin CI with skills-library validation.
+
+
 All notable changes to this repo—the `dreambase` plugin and its skills—are
 recorded here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); the plugin follows

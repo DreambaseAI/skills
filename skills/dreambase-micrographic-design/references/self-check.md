@@ -37,6 +37,8 @@ Composition can be correct in every particular and still fail because a third of
 
 **Pass:** `worstEmptyBandPct` ≤ 8. Treat `emptyPct` ≤ 15 as advisory only.
 
+This samples element bounding boxes, not painted pixels. A large background or border can cover the grid while leaving the composition visually empty; text boxes can overstate ink coverage. Use the result as a diagnostic alongside the rendered composition, not a conclusive density measurement.
+
 **`worstEmptyBandPct` is the metric that matters.** `emptyPct` counts any sample point not inside an element box, so **line-height leading between rows of text registers as empty** — a legitimately dense, text-heavy layout can report 40%+ while having no void at all. Don't chase that number. A void is a *contiguous band*, and the band metric is what detects one. If `emptyPct` is high but `worstEmptyBandPct` is low, look at the render and trust your eyes over the percentage.
 
 **If it fails, fix it architecturally, not by nudging.** The usual culprit is a flex spacer pushing a footer down. Make a *texture mass* the flexible element (`flex:1 1 auto` on a line-screen field, dot grid, or illustration band) so growth fills with content rather than air — or shrink the canvas.
@@ -149,6 +151,8 @@ Render the mark at 16 px and look at it. Bar-array marks alias badly — bars me
 ```
 
 **Pass:** `minBarPxAt16` ≥ 0.75. Below that, ship a **simplified few-bar variant** for favicon and small-badge use — don't scale the full mark down.
+
+This snippet measures rectangle heights only. Paths, strokes, clipping, transforms and the gaps between bars need separate inspection. Always review the actual 16px render, including gap collapse and aliasing, even when the diagnostic passes.
 
 ## 6. Placeholder residue
 

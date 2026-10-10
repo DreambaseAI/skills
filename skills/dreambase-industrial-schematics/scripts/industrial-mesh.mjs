@@ -174,7 +174,7 @@ function renderDonut(raw) {
 
   const arc = (r, z, a0, a1, ex, ey) => {
     const out = [];
-    const n = Math.max(3, Math.ceil((a1 - a0) / step));
+    const n = Math.max(3, Math.ceil(Math.abs(a1 - a0) / step));
     for (let i = 0; i <= n; i++) out.push(P(pt(a0 + ((a1 - a0) * i) / n, r, z, ex, ey)));
     return out;
   };

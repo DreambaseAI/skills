@@ -160,7 +160,7 @@ function rotXYZ({x, y, z}, r) {           // r = {x, y, z} in degrees
   return { x, y, z };
 }
 // perspective: d = camera distance in px (1200–2000 feels like the refs;
-// 0 or Infinity = orthographic/isometric)
+// 0 = orthographic; use this JSON-compatible value)
 const f = d > 0 ? d / (d - p.z) : 1;
 screen = { x: cx + p.x * f, y: cy + p.y * f };
 ```

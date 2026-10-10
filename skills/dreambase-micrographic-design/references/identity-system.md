@@ -53,7 +53,7 @@ The result reads simultaneously as a **shutter, a waveform, a signal, an apertur
 Observed: soft geometric lowercase (`serro`, `warp`, `mts`, `Record`), sentence-case grotesque (`Nucleus Engineering Office`, `Helix-DB`), extended caps grotesque for institutional names (`CATHEDRAL THERAPEUTICS ®`), and occasionally a **transitional serif** (`Synthetic`) when the brand wants gravity rather than speed.
 
 - **Lockup:** mark to the left, wordmark to the right, optically centred on the mark's midline, with a gap of roughly one bar-array width.
-- **`®` is set as part of the lockup** far more often than trademark practice requires — it's a graphic device here, and it belongs to the fiction.
+- **Registration symbols are claims, not neutral decoration.** Do not add `®` to a real brand merely to complete the look. Confirm registration and the relevant goods/services and jurisdiction first; otherwise omit it. For US usage, see the [USPTO's trademark-symbol guidance](https://www.uspto.gov/trademarks/basics/what-trademark). Clearly fictional editorial props need contextual review rather than a blanket exemption.
 - Pair a **rounded/warm wordmark** with the **hard bar-array mark**. That contrast is the signature; a technical mark plus a technical wordmark reads as generic.
 
 ## The four type registers

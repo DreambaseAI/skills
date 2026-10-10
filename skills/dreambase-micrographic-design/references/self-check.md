@@ -37,6 +37,8 @@ Composition can be correct in every particular and still fail because a third of
 
 **Pass:** `worstEmptyBandPct` ≤ 8. Treat `emptyPct` ≤ 15 as advisory only.
 
+This samples element bounding boxes, not painted pixels. A large background or border can cover the grid while leaving the composition visually empty; text boxes can overstate ink coverage. Use the result as a diagnostic alongside the rendered composition, not a conclusive density measurement.
+
 **`worstEmptyBandPct` is the metric that matters.** `emptyPct` counts any sample point not inside an element box, so **line-height leading between rows of text registers as empty** — a legitimately dense, text-heavy layout can report 40%+ while having no void at all. Don't chase that number. A void is a *contiguous band*, and the band metric is what detects one. If `emptyPct` is high but `worstEmptyBandPct` is low, look at the render and trust your eyes over the percentage.
 
 **If it fails, fix it architecturally, not by nudging.** The usual culprit is a flex spacer pushing a footer down. Make a *texture mass* the flexible element (`flex:1 1 auto` on a line-screen field, dot grid, or illustration band) so growth fills with content rather than air — or shrink the canvas.
@@ -83,15 +85,15 @@ The silent killer: a font family name that doesn't exist falls back, two registe
 
 **Pass:** no register has `fellBack: true`, and **`.r2`/`.r3` do not appear together** in `collapsedPairs`.
 
-`fellBack` means the rendered width matches a generic family exactly — the named font never arrived, and the register is silently gone.
+`fellBack` means the probe width matches a generic family; investigate whether the named font loaded. Matching metrics alone cannot establish fallback.
 
-`collapsedPairs` means two registers set the same string to the same width, so they are the same face whatever the CSS claims. Weight them by which pair it is:
+`collapsedPairs` flags similar probe widths for visual inspection; it does not establish that two faces are identical. Prioritize the pairs by their intended roles:
 
 - **`.r2` + `.r3` — must fix.** The display headline and the squared shout have to be different faces; this is the failure that makes output read flat.
 - **`.r1` + `.r2` — acceptable.** A wordmark and a headline may share a family if weight, width, or case make the roles clearly distinct. Only worth changing if the wordmark isn't reading as a separate thing.
 - **`.r4` + anything — must fix.** The micro-layer is monospace; if it matches another register it isn't mono.
 
-Width equality is the tell — if registers 2 and 3 set the same string to the same width, they are the same font no matter what the CSS says. Remember **"Archivo Expanded" is not a family**; use `font-variation-settings:'wdth' 125` on Archivo, or a genuine standalone family.
+Width equality is a diagnostic warning, not proof of font identity: distinct faces can share metrics, and weights or variable axes can change metrics within one family. Wait for fonts to load, inspect the browser's rendered-font information where available, and compare several representative strings and the actual glyph shapes. Remember **"Archivo Expanded" is not a family**; use `font-variation-settings:'wdth' 125` on Archivo, or a genuine standalone family.
 
 ## 3. Contrast
 
@@ -122,7 +124,7 @@ The idiom's love of tone-on-tone micro-type makes this easy to fail, and the tec
 - **Redaction bars** report a ratio of 1.0 because ink and ground are the same colour. That is the entire point; they are deliberately unreadable. Give them `aria-hidden="true"` and skip them (add `.redact` to the filter). If a redaction bar *is* readable, that's the actual bug.
 - **Decorative-only elements** — tick strips, registration crosses, grain, hazard striping — are exempt, but they must be `aria-hidden` and must carry no meaning.
 
-Everything else in the list is a real failure. The technical look is not an accessibility exemption, and tone-on-tone micro-type is where this idiom fails most often.
+Treat the remaining items as candidates for verification. This snippet assumes opaque, solid backgrounds and legacy RGB color strings; it does not composite translucent layers or handle images, gradients, or every modern color syntax. Use an appropriate contrast tool and inspect actual rendering for those cases. The technical look is not an accessibility exemption, and tone-on-tone micro-type is where this idiom fails most often.
 
 ## 4. Nothing load-bearing in the micro band
 
@@ -149,6 +151,8 @@ Render the mark at 16 px and look at it. Bar-array marks alias badly — bars me
 ```
 
 **Pass:** `minBarPxAt16` ≥ 0.75. Below that, ship a **simplified few-bar variant** for favicon and small-badge use — don't scale the full mark down.
+
+This snippet measures rectangle heights only. Paths, strokes, clipping, transforms and the gaps between bars need separate inspection. Always review the actual 16px render, including gap collapse and aliasing, even when the diagnostic passes.
 
 ## 6. Placeholder residue
 

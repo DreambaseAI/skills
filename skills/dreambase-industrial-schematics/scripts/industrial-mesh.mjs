@@ -135,11 +135,40 @@ function pt(angleDeg, r, z, ex = 0, ey = 0) {
 // ----------------------------------------------------------------- build
 
 function renderDonut(raw) {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) fail("config must be an object");
   const cfg = { ...DEFAULTS, ...raw };
   cfg.rotate = { ...DEFAULTS.rotate, ...(raw.rotate || {}) };
   cfg.grid = { ...DEFAULTS.grid, ...(raw.grid || {}) };
   cfg.cx = cfg.cx ?? cfg.width / 2;
   cfg.cy = cfg.cy ?? cfg.height * 0.48;
+  const range = (name, value, min, max) => {
+    if (typeof value !== "number" || !Number.isFinite(value) || value < min || value > max)
+      fail(`${name} must be a finite number in ${min}..${max}`);
+  };
+  for (const name of ["width", "height"]) range(name, cfg[name], 1, 10000);
+  for (const name of ["cx", "cy"]) range(name, cfg[name], -10000, 10000);
+  range("outerR", cfg.outerR, 1, 5000);
+  range("innerR", cfg.innerR, 0, cfg.outerR - 0.001);
+  range("depth", cfg.depth, 0, 5000);
+  range("perspective", cfg.perspective, 0, 1000000);
+  for (const axis of ["x", "y", "z"]) range(`rotate.${axis}`, cfg.rotate[axis], -3600, 3600);
+  range("grid.radial", cfg.grid.radial, 2, 360);
+  for (const key of ["rings", "zRings"]) {
+    range(`grid.${key}`, cfg.grid[key], 0, 64);
+    if (!Number.isInteger(cfg.grid[key])) fail(`grid.${key} must be an integer`);
+  }
+  range("fillOpacity", cfg.fillOpacity, 0, 1);
+  range("grain", cfg.grain, 0, 1);
+  range("gapDeg", cfg.gapDeg, 0, 360);
+  if (!["wire", "hybrid", "cel"].includes(cfg.fill)) fail("fill must be wire, hybrid or cel");
+  if (cfg.bg !== null && cfg.bg !== "transparent" && !/^#[0-9a-f]{6}$/i.test(cfg.bg))
+    fail("bg must be null, transparent or a six-digit hex color");
+  if (typeof cfg.segments === "number") {
+    range("segments", cfg.segments, 1, 128);
+    if (!Number.isInteger(cfg.segments)) fail("segments must be an integer");
+  } else if (!Array.isArray(cfg.segments) || cfg.segments.length < 1 || cfg.segments.length > 128) {
+    fail("segments must contain 1..128 entries");
+  }
   const T =
     typeof cfg.theme === "string"
       ? THEMES[cfg.theme] || fail(`unknown theme "${cfg.theme}" (phosphor|ember|mono or {hue})`)
@@ -158,7 +187,19 @@ function renderDonut(raw) {
     typeof cfg.segments === "number"
       ? Array.from({ length: cfg.segments }, () => ({ share: 1 / cfg.segments }))
       : cfg.segments;
+  for (const s of rawSegs) {
+    if (!s || typeof s !== "object" || Array.isArray(s)) fail("each segment must be an object");
+    const share = s.share ?? 1 / rawSegs.length;
+    range("segment.share", share, Number.MIN_VALUE, 1000000);
+    range("segment.explode", s.explode ?? 0, 0, 5000);
+  }
   const total = rawSegs.reduce((s, x) => s + (x.share ?? 1 / rawSegs.length), 0);
+  for (const s of rawSegs)
+    if (cfg.gapDeg >= (s.share ?? 1 / rawSegs.length) / total * 360)
+      fail("gapDeg must be smaller than every segment sweep");
+  const maxExplode = Math.max(...rawSegs.map(s => s.explode ?? 0));
+  if (cfg.perspective > 0 && cfg.perspective <= Math.hypot(cfg.outerR + maxExplode, cfg.depth))
+    fail("perspective must place the camera outside the geometry bound, or be zero for orthographic");
   let cursor = 0;
   const segs = rawSegs.map((s) => {
     const sweep = ((s.share ?? 1 / rawSegs.length) / total) * 360;
@@ -174,7 +215,7 @@ function renderDonut(raw) {
 
   const arc = (r, z, a0, a1, ex, ey) => {
     const out = [];
-    const n = Math.max(3, Math.ceil((a1 - a0) / step));
+    const n = Math.max(3, Math.ceil(Math.abs(a1 - a0) / step));
     for (let i = 0; i <= n; i++) out.push(P(pt(a0 + ((a1 - a0) * i) / n, r, z, ex, ey)));
     return out;
   };
@@ -288,7 +329,7 @@ function renderDonut(raw) {
     const dy = a.y >= cfg.cy ? 55 : -55; // route away from the object, never across it
     const e1 = { x: a.x + 70 * dx, y: a.y + dy };
     const e2 = { x: e1.x + 130 * dx, y: e1.y };
-    callouts.push(`<!-- callout: ${esc(s.label)} -->
+    callouts.push(`<!-- segment callout -->
     <circle cx="${fmt(a.x)}" cy="${fmt(a.y)}" r="3" fill="${T.line}" filter="url(#glow)"/>
     <circle cx="${fmt(a.x)}" cy="${fmt(a.y)}" r="6.5" fill="none" stroke="${T.line}" stroke-width="1" opacity="0.6"/>
     <path d="M ${fmt(a.x)} ${fmt(a.y)} L ${fmt(e1.x)} ${fmt(e1.y)} L ${fmt(e2.x)} ${fmt(e2.y)}" fill="none" stroke="${T.line}" stroke-width="1" opacity="0.7"/>

@@ -97,6 +97,29 @@ function renderRing(cfg) {
   cfg = deepMerge(RING_DEFAULTS, cfg);
   cfg.cx = cfg.cx ?? cfg.width / 2;
   cfg.cy = cfg.cy ?? cfg.height * 0.52;
+  validateBase(cfg);
+  number("radius", cfg.radius, 1, 5000);
+  number("tilt", cfg.tilt, -89, 89);
+  number("rotate", cfg.rotate, -3600, 3600);
+  color("ink", cfg.ink); color("inkDim", cfg.inkDim);
+  number("grain", cfg.grain, 0, 1);
+  if (cfg.innerRing !== false && cfg.innerRing !== true) number("innerRing", cfg.innerRing, 0.001, 0.999);
+  if (cfg.ticks) {
+    integer("ticks.count", cfg.ticks.count, 0, 4096);
+    number("ticks.length", cfg.ticks.length, 0, cfg.radius - 4);
+    number("ticks.width", cfg.ticks.width, 0.01, 100);
+    number("ticks.offset", cfg.ticks.offset, -3600, 3600);
+  }
+  if (cfg.arc) {
+    number("arc.start", cfg.arc.start, -3600, 3600);
+    number("arc.sweep", cfg.arc.sweep, 0, 360);
+    number("arc.width", cfg.arc.width, 0.01, 100);
+  }
+  if (!Array.isArray(cfg.nodes) || cfg.nodes.length > 128) fail("nodes must be an array with at most 128 entries");
+  for (const node of cfg.nodes) {
+    if (!node || typeof node !== "object") fail("nodes must contain objects");
+    number("node.angle", node.angle, -3600, 3600);
+  }
   const { ink, inkDim } = cfg;
   const far = [];
   const near = [];
@@ -162,7 +185,7 @@ function renderRing(cfg) {
     const ul = Math.hypot(ux, uy) || 1;
     const active = !!n.active;
     const g = [];
-    g.push(`<!-- node: ${esc(n.label || "")} -->`);
+    g.push(`<!-- ring node -->`);
     g.push(`<circle cx="${fmt(p.x)}" cy="${fmt(p.y)}" r="7" fill="none" stroke="${ink}" stroke-width="1.2" opacity="${active ? 0.8 : 0.35}"/>`);
     if (active)
       g.push(`<circle cx="${fmt(p.x + (ux / ul) * 6)}" cy="${fmt(p.y + (uy / ul) * 6)}" r="3.5" fill="${ink}" filter="url(#glow)"/>`);
@@ -226,6 +249,13 @@ ${defs}
 
 function renderRuler(cfg) {
   cfg = deepMerge(RULER_DEFAULTS, cfg);
+  validateBase(cfg);
+  integer("count", cfg.count, 2, 4096);
+  number("progress", cfg.progress, 0, 1);
+  number("pad", cfg.pad, 0, cfg.width / 2 - 0.001);
+  number("radius", cfg.radius, 0, cfg.height / 2);
+  if (cfg.height < 22) fail("ruler height must be at least 22");
+  for (const key of ["track", "tick", "done", "active"]) color(key, cfg[key]);
   const innerW = cfg.width - cfg.pad * 2;
   const gap = innerW / (cfg.count - 1);
   const activeIdx = Math.round(cfg.progress * (cfg.count - 1));
@@ -249,6 +279,24 @@ function renderRuler(cfg) {
 }
 
 // -------------------------------------------------------------------- cli
+
+function number(name, value, min, max) {
+  if (typeof value !== "number" || !Number.isFinite(value) || value < min || value > max)
+    fail(`${name} must be a finite number in ${min}..${max}`);
+}
+function integer(name, value, min, max) {
+  number(name, value, min, max);
+  if (!Number.isInteger(value)) fail(`${name} must be an integer`);
+}
+function color(name, value) {
+  if (typeof value !== "string" || (value !== "transparent" && !/^#[0-9a-f]{6}$/i.test(value)))
+    fail(`${name} must be transparent or a six-digit hex color`);
+}
+function validateBase(cfg) {
+  for (const key of ["width", "height"]) number(key, cfg[key], 1, 10000);
+  for (const key of ["cx", "cy"]) if (cfg[key] != null) number(key, cfg[key], -10000, 10000);
+  if (cfg.bg != null) color("bg", cfg.bg);
+}
 
 const HELP = `industrial-ring.mjs — industrial schematic SVG scaffolds
 
@@ -282,6 +330,7 @@ try {
 } catch (e) {
   fail(`could not parse config: ${e.message}`);
 }
+if (!cfg || typeof cfg !== "object" || Array.isArray(cfg)) fail("config must be an object");
 const svg = mode === "ring" ? renderRing(cfg) : renderRuler(cfg);
 if (outPath) {
   writeFileSync(outPath, svg);

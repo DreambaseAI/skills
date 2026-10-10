@@ -18,4 +18,9 @@ for (const share of [1, 0.75]) {
   const expected = 2 * (Math.max(3, Math.ceil(360 * share / 6)) + 1);
   assert.equal(samples.length, expected, 'Both arc directions must retain angular resolution');
 }
-console.log('Reverse-arc regression tests passed');
+for (const config of [null, [], {segments: 0}, {segments: [null]}, {segments: [{share: 0}]}, {innerR: 500}, {grid: {rings: 1000}}, {perspective: 10}, {bg: '" onload="alert(1)'}]) {
+  const result = spawnSync(process.execPath, [generator, 'donut', JSON.stringify(config)], { encoding: 'utf8' });
+  assert.notEqual(result.status, 0, 'Invalid config must fail');
+  assert.equal(result.stdout, '', 'Invalid config must not emit SVG');
+}
+console.log('Reverse-arc and invalid-configuration regression tests passed');

@@ -1,6 +1,6 @@
 # Marks: What's Free, What's Restricted, and How to Invent One
 
-Conformity marks are the most recognisable part of the vocabulary and the only part that carries legal risk. This file makes the distinction usable.
+Conformity marks are a recognisable part of the vocabulary with specific application restrictions. Copyright, trademarks, asset licenses and misleading factual claims can also matter. A visual category is not clearance for a particular use.
 
 **This is design guidance assembled from primary legal sources, not legal advice.** For anything that ships as a physical product, on packaging, or in advertising, the answer is always "get real advice" — and the skill's job is to raise that before the work is built, not after.
 
@@ -23,7 +23,9 @@ The key insight: **"free artwork" and "free to apply" are different questions.**
 | **(c) Informational symbols** | IEC 60417, ISO 7000 | Copyrighted database, licensed by subscription | Free of certification claims — these are the **safe raw material for texture** |
 | **(d) Genuinely free** | AIGA/DOT Symbol Signs, Unicode, US Government works | Public domain — AIGA's own words: "These copyright-free symbols…" | Free |
 
-**Tier (c) is where most of the visual register actually lives.** AC/DC symbols, the Class II double square, the indoor-use house, the hazard triangle, the crossed-out bin, the Mobius loop — these carry the whole look of a rating plate while making no certification claim about anything.
+**Tier (c) supplies much of the visual register**, but informational symbols can still communicate factual safety, protection or environmental claims. Do not imply properties the product does not have. The WEEE crossed-out bin belongs to the restricted product-marking context in tier (a), not a blanket pool of decorative texture. Check each symbol's source, license and meaning for the intended use.
+
+Unicode encodes characters; it does not make every font's glyph artwork public domain. Check the font or artwork license separately. Access to a symbol database likewise does not by itself settle every reproduction or application right.
 
 ## What a designer may and may not do
 

@@ -67,7 +67,7 @@ The vocabulary both modes draw on:
 - Chevron runs — `>>>>>>>`
 - Vertical rotated micro-labels running up an edge
 - Document metadata — `ISSUE 01`, `DISTRIBUTED BY:`, `DOCUMENT TYPE:`, `01/03`, revision and date codes
-- Oversized `®` as a graphic element
+- Oversized fictional issue codes or original seals as graphic elements; use `®` only when its registration claim is appropriate (see `identity-system.md`)
 
 **Marks and emblems**
 - Invented circular seals — ring of type around a monogram or star

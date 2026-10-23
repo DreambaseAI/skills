@@ -5,34 +5,18 @@
     "url": "https://github.com/DreambaseAI"
   },
   "metadata": {
-    "description": "Create datasets for your agents and protect production data from queries.",
-    "version": "1.0.0"
+    "description": "Compatibility catalog for the Dreambase MCP plugin in DreambaseAI/plugin.",
+    "version": "2.0.0"
   },
   "plugins": [
     {
       "name": "dreambase",
-      "source": "./",
-      "description": "Create datasets for your agents and protect production data from queries. With a single MCP your agents can build custom datasets blending together data from connected Supabase, API, and MCP sources, connect missing data providers, inspect dashboards and health reports, and turn verified results into charts, reports, and presentations.",
-      "version": "1.0.0",
-      "author": {
-        "name": "Dreambase",
-        "url": "https://github.com/DreambaseAI"
+      "source": {
+        "source": "github",
+        "repo": "DreambaseAI/plugin"
       },
-      "homepage": "https://dreambase.com",
-      "repository": "https://github.com/DreambaseAI/skills",
-      "license": "MIT",
-      "category": "data",
-      "keywords": [
-        "dreambase",
-        "mcp",
-        "analytics",
-        "dashboards",
-        "supabase",
-        "charts",
-        "echarts",
-        "data-visualization",
-        "reports"
-      ]
+      "description": "Connect to Dreambase to query, plan, and operate workspace data.",
+      "version": "2.0.0"
     }
   ]
 }

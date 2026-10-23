@@ -2,12 +2,11 @@
 name: dreambase-echarts
 description: >-
   Author Apache ECharts option (EChartsOption) JSON configs for the Dreambase
-  renderer. Use whenever the user wants a chart, graph, plot, dashboard, or any
-  data visualization — line, bar, pie, scatter, heatmap, sankey, treemap,
-  sunburst, gauge, candlestick, boxplot, funnel, radar, graph/network, map, or
-  calendar — or asks to visualize, plot, or chart data, even if they never say
-  "ECharts". Also use when editing, debugging, or validating an existing
-  ECharts config.
+  renderer. Use when the user asks for a Dreambase chart config, an ECharts
+  option object, or to edit, debug, or validate existing ECharts JSON. Do not
+  use for slide decks, dashboard product workflows, visualization-design
+  critique, or general "make a chart" requests that are not ECharts/Dreambase
+  config work.
 ---
 
 # Dreambase ECharts Config Authoring
@@ -16,9 +15,9 @@ Produce a single JSON object conforming to the ECharts `EChartsOption` shape. Th
 
 ## Output contract (Dreambase renderer)
 
-- Emit **pure JSON** — one option object, no surrounding JS, no comments.
-- Callbacks (`formatter`, `symbolSize` functions, …) are emitted as **JS source strings** (e.g. `"formatter": "(params) => ..."`). The renderer's safety policy decides whether to eval them, so prefer declarative equivalents when they exist: template strings (`"{b}: {d}%"`) and `valueFormatter` over `formatter` functions.
-- The host owns the chart lifecycle: it calls `chart.resize()` and applies partial updates via `setOption`. Never rely on attaching listeners — for breakpoint behavior use `baseOption` + `media` (see `references/patterns/responsive-resize.md`).
+- Emit **pure JSON** — one option object, no surrounding JavaScript, no comments, no executable callbacks.
+- `formatter`, `valueFormatter`, `symbolSize`, and similar fields must be **declarative**: template strings (`"{b}: {d}%"`) or numeric literals. Do not emit function source, arrow functions, or `custom`/`renderItem` series. The host does not run scripts from the option object.
+- The host owns the chart lifecycle: it calls `chart.resize()` and applies partial updates via `setOption`. Never attach listeners — for breakpoint behavior use `baseOption` + `media` (see `references/patterns/responsive-resize.md`).
 - Inline at most ~200 data points via `series[].data`; past that, use `dataset.source` so data stays tabular and series stay declarative.
 
 ## Critical rules
@@ -53,7 +52,7 @@ Produce a single JSON object conforming to the ECharts `EChartsOption` shape. Th
 | Network | graph |
 | Pipeline stages | funnel |
 | Daily activity | calendar + heatmap |
-| Bespoke/illustrative form (ranges, Gantt, hexbin, error bars, data art) | custom (`renderItem`) + pictorialBar + graphic |
+| Bespoke/illustrative form (ranges, Gantt, ISOTYPE, annotation art) | pictorialBar + graphic (see `references/charts/custom.md`) — not `custom` series |
 
 ## Workflow
 
@@ -61,14 +60,14 @@ Produce a single JSON object conforming to the ECharts `EChartsOption` shape. Th
 2. Read the matching reference:
    - Common types (line, bar, pie, scatter, heatmap, candlestick, radar): `references/core-chart-types.md` has a working snippet to start from.
    - Intricate types (sankey, treemap, sunburst, tree, graph, gauge, funnel, boxplot, map, calendar): read `references/charts/<type>.md` — their data schemas are easy to get subtly wrong from memory.
-   - Bespoke or illustration-style visuals (a form no built-in series expresses, or an editorial/data-story piece): read `references/charts/custom.md` for the `renderItem` contract and the custom + pictorialBar + graphic toolkit.
+   - Bespoke or illustration-style visuals: read `references/charts/custom.md` for the pictorialBar + graphic toolkit (no `renderItem`).
    - Composite requirements (zoom, dual axis, stacking, small multiples, streaming, theming): the matching recipe in `references/patterns/`.
 3. When unsure of an exact option name, type, or default, look it up instead of guessing:
    ```bash
    node scripts/echarts-option.mjs series-sankey --depth 2   # subtree of valid options
    node scripts/echarts-option.mjs --find sampling            # search by name
    ```
-   The index is vendored (offline, versioned to the ECharts release in `assets/option-index.json`).
+   The index is vendored offline as `assets/option-index.json.gz`.
 4. Author the config against `references/core-components.md` for axes/tooltip/legend/grid/dataZoom/visualMap/dataset details.
 5. Validate (rule above), then return the JSON.
 

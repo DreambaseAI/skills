@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 /**
  * Look up valid ECharts option properties, types, and defaults from the
- * vendored index (offline). Zero dependencies.
+ * vendored index (offline). Zero dependencies. No network access.
  *
  * Usage:
  *   node scripts/echarts-option.mjs <path> [--depth N]     # subtree at path
  *   node scripts/echarts-option.mjs --find <term>          # search prop names
- *   node scripts/echarts-option.mjs --desc <path>          # full prose (network)
  *
  * Path syntax: dot-separated. Series variants are addressed as
  * "series-sankey" or "series.sankey" interchangeably:
@@ -18,9 +17,13 @@
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { gunzipSync } from "node:zlib";
 
-const INDEX_PATH = resolve(dirname(fileURLToPath(import.meta.url)), "../assets/option-index.json");
-const { root } = JSON.parse(readFileSync(INDEX_PATH, "utf8"));
+const INDEX_PATH = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  "../assets/option-index.json.gz",
+);
+const { root } = JSON.parse(gunzipSync(readFileSync(INDEX_PATH)).toString("utf8"));
 
 function findChild(nodes, name) {
   return nodes.find((n) => n.p === name);
@@ -69,38 +72,9 @@ function search(term, nodes = root, prefix = "", hits = []) {
   return hits;
 }
 
-async function fetchDesc(path) {
-  // option-parts files are keyed by top-level part: option.<part>.json
-  const segs = path.replace(/^series-/, "series.").split(".");
-  const part = segs[0] === "series" && segs[1] ? `series-${segs[1]}` : segs[0];
-  const url = `https://echarts.apache.org/en/documents/option-parts/option.${part}.json`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`fetch failed: ${res.status} ${url}`);
-  const doc = await res.json();
-  // keys inside a part file are relative to the part root, e.g. "nodeAlign", "links.value"
-  const key = (segs[0] === "series" && segs[1] ? segs.slice(2) : segs.slice(1)).join(".");
-  if (!key) {
-    console.log(`Documented options in ${part}:\n  ${Object.keys(doc).slice(0, 80).join("\n  ")}`);
-    return;
-  }
-  const entry = doc[key];
-  if (!entry?.desc) {
-    const close = Object.keys(doc).filter((k) => k.includes(key.split(".").pop())).slice(0, 15);
-    console.log(`No prose found for '${key}' in ${part}. Closest keys:\n  ${close.join("\n  ")}`);
-    return;
-  }
-  const text = entry.desc
-    .replace(/<pre[^>]*>([\s\S]*?)<\/pre>/g, (_, code) => `\n${code}\n`)
-    .replace(/<[^>]+>/g, "")
-    .replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;/g, "'")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
-  console.log(`# ${key}\n\n${text}`);
-}
-
 const args = process.argv.slice(2);
 if (!args.length) {
-  console.log("Usage: echarts-option.mjs <path> [--depth N] | --find <term> | --desc <path>");
+  console.log("Usage: echarts-option.mjs <path> [--depth N] | --find <term>");
   console.log(`Top-level options:\n  ${root.map((n) => n.p).join(", ")}`);
   process.exit(2);
 }
@@ -110,8 +84,6 @@ if (args[0] === "--find") {
   if (!hits.length) console.log("no matches");
   for (const h of hits.slice(0, 60)) console.log(`${h.path}  ${h.node.t ? `(${h.node.t})` : ""}${h.node.d !== undefined ? ` = ${h.node.d}` : ""}`);
   if (hits.length > 60) console.log(`… ${hits.length - 60} more matches`);
-} else if (args[0] === "--desc") {
-  await fetchDesc(args[1] ?? "");
 } else {
   const depthIdx = args.indexOf("--depth");
   const depth = depthIdx !== -1 ? Number(args[depthIdx + 1]) : 1;

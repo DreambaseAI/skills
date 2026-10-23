@@ -1,7 +1,6 @@
 # Contributing
 
-This repository maintains the optional Dreambase skills library. The MCP plugin
-and its release tooling are maintained in [DreambaseAI/plugin](https://github.com/DreambaseAI/plugin).
+This repository maintains optional community skills. Each skill is useful on its own and can compose with other installed skills.
 
 ## Contributing a skill
 
@@ -16,7 +15,7 @@ The short version:
 2. Fill in `SKILL.md` — frontmatter `name` must match the directory name and carry the `dreambase-` prefix.
 3. Add 2–3 realistic test prompts to `evals/evals.json`, then run the eval loop described in `skills/dreambase-skill-creator/references/eval-loop.md`.
 4. Add the skill to the README table. Preserve the eight original library skills
-   listed in `store/main-skills.json`; the MCP skill is maintained in the plugin repo.
+   listed in `store/main-skills.json`.
 5. Validate before committing:
    ```bash
    node skills/dreambase-skill-creator/scripts/validate-skill.mjs --all
@@ -30,5 +29,4 @@ retry it).
 
 ## Validation
 
-Run `npm run check:skills` before committing. Plugin manifests, MCP workflows,
-and marketplace submissions should be changed in the plugin repository.
+Run `npm run check:skills` before committing. Keep this repository focused on reusable skills, references, scripts and evaluation fixtures.

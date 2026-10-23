@@ -87,7 +87,7 @@ Chart vs. dashboard vs. infographic vs. written report is a design decision in i
 
 ## Working with dreambase-echarts
 
-This skill decides *what* to build and *why*; `dreambase-echarts` builds it. When the deliverable is a rendered chart: run this skill's workflow to choose form, encoding, context, and accessibility requirements — then hand the resulting spec to the dreambase-echarts skill to author and validate the option JSON. In critiques of existing ECharts configs, use this skill for the design findings and dreambase-echarts for the mechanical config fixes.
+This skill decides *what* to build and *why*. When `dreambase-echarts` is installed and ECharts is the requested renderer, hand the resulting specification to it for option authoring and validation. Otherwise use the requested renderer directly, following this skill’s encoding, accessibility and integrity references. For existing ECharts configurations, use the companion for mechanical fixes when available; its installation is optional.
 
 ## Output discipline
 

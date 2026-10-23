@@ -8,20 +8,22 @@ description: >-
   present, summarize, or communicate analytics or data to an audience: "make
   a report", "exec summary", "board deck", "slides", "one-pager", "data
   story", "writeup of these results", or "make this presentable" — even if
-  they don't mention design. Always apply dreambase-visualization-design for
-  the charts themselves; use dreambase-echarts when charts will actually
-  render.
+  they don't mention design. When available, apply dreambase-visualization-design for
+  the charts themselves; use dreambase-echarts when installed and charts
+  render with ECharts.
 ---
 
 # Data Stories
 
 Turn analysis into artifacts people actually read, understand, and act on. The bar is the work of the field's best — FT, NYT Graphics, The Pudding, Reuters — where accurate charts, deliberate typography, and narrative structure combine into something that reads effortlessly. "Mechanically correct content in default styling" is the failure mode this skill exists to prevent.
 
-## Skill composition (non-optional wiring)
+## Optional skill composition
 
-- **`dreambase-visualization-design` — always.** Every chart in every artifact follows its selection matrix, encoding rules, and integrity gate. This skill adds the narrative and layout layers on top; it never overrides honest scales, context, or accessibility. Beauty doesn't buy exemptions.
-- **`dreambase-echarts` — when charts render.** Standard forms from its references; bespoke/illustrative forms via its custom-series reference (charts/custom.md in that skill — custom series, pictorialBar, graphic layer).
+- **`dreambase-visualization-design` — when installed.** Every chart in every artifact follows its selection matrix, encoding rules, and integrity gate. This skill adds the narrative and layout layers on top; it never overrides honest scales, context, or accessibility. Beauty doesn't buy exemptions.
+- **`dreambase-echarts` — when installed and charts render with ECharts.** Standard forms from its references; bespoke/illustrative forms via its custom-series reference (charts/custom.md in that skill — custom series, pictorialBar, graphic layer).
 - **Mechanics skills — when producing files.** If available, delegate .pptx to the `pptx` skill, .docx to `docx`, PDF to `pdf`; this skill owns the design system those mechanics execute.
+
+When a companion is absent, continue standalone: establish grain, units, date coverage and missing values; choose an honest familiar encoding; name sources and limitations; use non-color cues and readable labels. Use the requested host output mechanism rather than requiring a particular file-generation skill.
 
 ## Core stance
 

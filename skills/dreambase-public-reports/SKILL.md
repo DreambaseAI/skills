@@ -3,10 +3,10 @@ name: dreambase-public-reports
 description: >-
   Create disclosure-safe public reports, data stories, dashboards, infographics,
   and static artifacts that are informed by real or sensitive data without
-  publishing the underlying values. Use whenever analytics will be shared
+  publishing the underlying values. Use when confidential or restricted analytics will be shared
   publicly, externally, on a marketing site, in a public report, or with an
-  audience that must see honest trends but not confidential numbers. Apply this
-  alongside dreambase-data-stories, dreambase-visualization-design, and
+  audience that must see honest trends but not confidential numbers. Optionally compose this
+  with dreambase-data-stories, dreambase-visualization-design, and
   dreambase-echarts; it governs redaction, transformed chart data, constructive
   tone, and approval for visible percentages, rates, deltas, ratios, or indexes.
 ---
@@ -17,10 +17,12 @@ Create a static public artifact that communicates what the real data supports wi
 
 ## Skill composition
 
-- Apply `dreambase-data-stories` for the narrative, hierarchy, and artifact design.
-- Apply `dreambase-visualization-design` for chart selection, encoding, accessibility, and integrity.
-- Apply `dreambase-echarts` when charts render with ECharts.
+- When installed, apply `dreambase-data-stories` for the narrative, hierarchy, and artifact design.
+- When installed, apply `dreambase-visualization-design` for chart selection, encoding, accessibility, and integrity.
+- When installed, apply `dreambase-echarts` when charts render with ECharts.
 - Treat this skill as the publication-safety layer. It narrows what may enter the public artifact but never relaxes the other skills' requirements for statistical honesty.
+
+Companion skills are optional. Without them, create a clear claim-first artifact, verify every factual claim against the supplied data, use honest scales and readable non-color cues, and perform this skill's disclosure audit directly. Already-public data does not need the confidential-value restrictions unless the user requests them.
 
 ## Public boundary
 

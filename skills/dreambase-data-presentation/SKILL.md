@@ -54,9 +54,9 @@ Two consequences worth stating plainly:
 ## Skill composition
 
 - **`dreambase-data-stories` — for the argument.** It owns the Big Idea, the pyramid/arc, and audience tiering. This skill owns the slide, the room, and the presenter. When both apply: get the Big Idea and storyline there, then bring them here. When it isn't available, `references/deck-genres.md` carries enough storyline structure to work standalone.
-- **`dreambase-visualization-design` — for every chart.** Its selection matrix and integrity gate stay in force. This skill adds what it doesn't cover: legibility at room distance, staged reveals, and one-chart-carries-one-claim.
+- **`dreambase-visualization-design` — for every chart.** When installed, use its selection matrix and integrity gate. Otherwise verify units, denominators, scales, missing values and sources directly. This skill adds what it doesn't cover: legibility at room distance, staged reveals, and one-chart-carries-one-claim.
 - **`dreambase-echarts` — when charts render.** Deck-specific animation settings are in `references/interactive.md`; don't accept ECharts' defaults for a deck.
-- **`dreambase-public-reports` — when the audience is external.** Its redaction rules govern before anything ships.
+- **`dreambase-public-reports` — when installed and confidential source data is intended for external disclosure.** Its redaction rules govern before anything ships.
 - **A brand skill, `design.md`, `.potx`, or a brand URL — whenever offered.** `references/brand-theming.md` has the extraction procedure per input type. Absent any brand input, derive a system rather than reaching for defaults.
 
 ## Non-negotiables

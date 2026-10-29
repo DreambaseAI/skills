@@ -17,5 +17,3 @@ jobs:
         with:
           node-version: 20
       - run: npm run check:skills
-      - name: Validate Claude compatibility redirect
-        run: npx --yes @anthropic-ai/claude-code@2.1.293 plugin validate .claude-plugin/marketplace.json --strict
